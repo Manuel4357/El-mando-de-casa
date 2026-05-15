@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Gestión del hogar familiar">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mando de Casa">
+<link rel="manifest" href="manifest.json">
+<title>El Mando de Casa</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh}
+  .app{max-width:420px;margin:0 auto;padding:16px 12px 80px}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .header-title{font-size:20px;font-weight:600;color:#1a1a1a}
+  .header-date{font-size:12px;color:#888;margin-top:2px}
+  .nav{display:flex;gap:6px;margin-bottom:16px;background:#e8e8e3;border-radius:14px;padding:4px;position:sticky;top:8px;z-index:10}
+  .nav button{flex:1;padding:8px 4px;border:none;background:transparent;border-radius:10px;font-size:11px;color:#666;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .nav button .nav-icon{font-size:18px}
+  .nav button.active{background:#fff;color:#1a1a1a;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+  .section{display:none}.section.active{display:block}
+  .card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+  .card-title{font-size:13px;font-weight:600;color:#666;margin-bottom:10px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.4px}
+  .task-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec}
+  .task-row:last-child{border-bottom:none}
+  .task-check{width:22px;height:22px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;font-size:12px}
+  .task-check.done{background:#1D9E75;border-color:#1D9E75;color:#fff}
+  .task-text{flex:1;font-size:14px;color:#1a1a1a}
+  .task-text.done{text-decoration:line-through;color:#aaa}
+  .badge{font-size:11px;padding:3px 8px;border-radius:8px;font-weight:500;flex-shrink:0}
+  .badge-mama{background:#EEEDFE;color:#3C3489}
+  .badge-papa{background:#E6F1FB;color:#0C447C}
+  .badge-manuel{background:#E1F5EE;color:#085041}
+  .badge-gonzalo{background:#FAEEDA;color:#633806}
+  .add-row{display:flex;gap:8px;margin-top:10px}
+  .add-row input{flex:1;font-size:13px;padding:8px 10px;border:1px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none}
+  .add-row input:focus{border-color:#7F77DD}
+  .add-row select{font-size:12px;padding:8px 6px;border:1px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none}
+  .add-row button{padding:8px 14px;border-radius:10px;border:none;background:#7F77DD;color:#fff;cursor:pointer;font-size:16px;font-weight:600}
+  .day-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0f0ec}
+  .day-row:last-child{border-bottom:none}
+  .day-row.today .day-label{color:#7F77DD;font-weight:700}
+  .day-row.today .day-meal{font-weight:600}
+  .day-label{font-size:12px;color:#888;width:30px;flex-shrink:0}
+  .day-meal{flex:1;font-size:13px;color:#1a1a1a}
+  .event-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec}
+  .event-row:last-child{border-bottom:none}
+  .event-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
+  .event-title{font-size:14px;color:#1a1a1a;font-weight:500}
+  .event-meta{font-size:12px;color:#888;margin-top:2px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .stat{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+  .stat-num{font-size:28px;font-weight:700;color:#1a1a1a}
+  .stat-lbl{font-size:11px;color:#888;margin-top:2px}
+  .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+  .avatar-mama{background:#EEEDFE;color:#3C3489}
+  .avatar-papa{background:#E6F1FB;color:#0C447C}
+  .avatar-manuel{background:#E1F5EE;color:#085041}
+  .avatar-gonzalo{background:#FAEEDA;color:#633806}
+  .member-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec}
+  .member-row:last-child{border-bottom:none}
+  .member-info{flex:1}
+  .member-name{font-size:14px;font-weight:600;color:#1a1a1a}
+  .member-sub{font-size:12px;color:#888}
+  .progress-bar{height:4px;background:#f0f0ec;border-radius:2px;margin-top:6px;overflow:hidden}
+  .progress-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width .4s}
+  .progress-lbl{font-size:11px;color:#aaa;margin-top:3px}
+  .compra-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;color:#555}
+  .compra-item:last-child{border-bottom:none}
+  .compra-item::before{content:'·';color:#bbb;font-size:18px;line-height:1}
+  .btn-full{width:100%;padding:10px;border-radius:10px;border:1px solid #e0e0e0;background:#f9f9f7;color:#555;cursor:pointer;font-size:13px;margin-top:8px;font-family:inherit}
+  .btn-full:active{background:#efefeb}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div>
+      <div class="header-title">🏠 El Mando de Casa</div>
+      <div class="header-date" id="fecha"></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="active" onclick="showTab('hoy')">
+      <span class="nav-icon">☀️</span>Hoy
+    </button>
+    <button onclick="showTab('tareas')">
+      <span class="nav-icon">✅</span>Tareas
+    </button>
+    <button onclick="showTab('menu')">
+      <span class="nav-icon">🍽️</span>Menú
+    </button>
+    <button onclick="showTab('familia')">
+      <span class="nav-icon">👨‍👩‍👦</span>Familia
+    </button>
+  </div>
+
+  <div id="hoy" class="section active">
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num" id="stat-pend">0</div><div class="stat-lbl">Pendientes</div></div>
+      <div class="stat"><div class="stat-num" id="stat-done">0</div><div class="stat-lbl">Completadas</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Tareas de hoy</div>
+      <div id="hoy-tasks"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🍽️ Menú de hoy</div>
+      <div style="font-size:15px;font-weight:600;color:#1a1a1a" id="hoy-comida"></div>
+      <div style="font-size:13px;color:#888;margin-top:4px" id="hoy-cena"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Próximos eventos</div>
+      <div id="hoy-events"></div>
+    </div>
+  </div>
+
+  <div id="tareas" class="section">
+    <div class="card">
+      <div class="card-title">🏠 Hogar</div>
+      <div id="tasks-hogar"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">👦 Niños</div>
+      <div id="tasks-ninos"></div>
+    </div>
+    <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
+      <div class="card-title">➕ Nueva tarea</div>
+      <div class="add-row">
+        <input id="new-task" type="text" placeholder="Ej: Tender la ropa...">
+        <select id="new-who">
+          <option value="mama">Mamá</option>
+          <option value="papa">Papá</option>
+          <option value="manuel">Manuel</option>
+          <option value="gonzalo">Gonzalo</option>
+        </select>
+        <button onclick="addTask()">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="menu" class="section">
+    <div class="card">
+      <div class="card-title">🗓️ Menú semanal</div>
+      <div id="menu-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛒 Lista de la compra</div>
+      <div id="compra-list"></div>
+    </div>
+  </div>
+
+  <div id="familia" class="section">
+    <div class="card">
+      <div class="card-title">👨‍👩‍👦 Miembros</div>
+      <div id="family-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 Eventos</div>
+      <div id="events-list"></div>
+      <button class="btn-full" onclick="showToast('Próximamente: añadir eventos 📅')">+ Añadir evento</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const now=new Date();
+document.getElementById('fecha').textContent=`${DAYS[now.getDay()]}, ${now.getDate()} de ${MONTHS[now.getMonth()]} de ${now.getFullYear()}`;
+
+let tasks=JSON.parse(localStorage.getItem('mdc_tasks')||'null')||[
+  {id:1,text:'Poner lavadora',who:'mama',cat:'hogar',done:false},
+  {id:2,text:'Fregar los platos',who:'manuel',cat:'hogar',done:false},
+  {id:3,text:'Pasar el aspirador',who:'mama',cat:'hogar',done:false},
+  {id:4,text:'Sacar la basura',who:'papa',cat:'hogar',done:false},
+  {id:5,text:'Recoger su habitación',who:'manuel',cat:'hogar',done:false},
+  {id:6,text:'Recoger los juguetes',who:'gonzalo',cat:'ninos',done:false},
+  {id:7,text:'Llevar a Gonzalo al cole',who:'papa',cat:'ninos',done:false},
+  {id:8,text:'Revisar deberes de Manuel',who:'mama',cat:'ninos',done:false},
+];
+
+const menu=[
+  {d:'Lun',comida:'Paella de verduras',cena:'Sopa de fideos'},
+  {d:'Mar',comida:'Pollo al horno',cena:'Ensalada mixta'},
+  {d:'Mié',comida:'Macarrones con tomate',cena:'Huevos revueltos'},
+  {d:'Jue',comida:'Merluza a la plancha',cena:'Bocadillos'},
+  {d:'Vie',comida:'Lentejas con chorizo',cena:'Tortilla de patatas'},
+  {d:'Sáb',comida:'Cocido madrileño',cena:'Pizza casera'},
+  {d:'Dom',comida:'Paella familiar',cena:'Sobras / libre'},
+];
+
+const compra=['Lentejas · 500g','Chorizo · 1 pieza','Patatas · 1kg','Huevos · 12u','Merluza · 600g','Macarrones · 500g','Pollo · 1kg','Verduras variadas','Pan · barra','Leche · 2L'];
+
+const events=[
+  {title:'Reunión cole Manuel',meta:'Lun 18 may · 17:00',color:'#7F77DD'},
+  {title:'Médico Gonzalo',meta:'Mar 19 may · 10:30',color:'#185FA5'},
+  {title:'Partido de fútbol Manuel',meta:'Sáb 23 may · 11:00',color:'#1D9E75'},
+  {title:'Cumple abuela',meta:'Dom 24 may · 14:00',color:'#D4537E'},
+];
+
+const whoLabels={mama:'Mamá',papa:'Papá',manuel:'Manuel',gonzalo:'Gonzalo'};
+
+function saveTasks(){localStorage.setItem('mdc_tasks',JSON.stringify(tasks));}
+
+function badge(who){return `<span class="badge badge-${who}">${whoLabels[who]}</span>`}
+function check(id,done){return `<div class="task-check${done?' done':''}" onclick="toggle(${id})">${done?'✓':''}</div>`}
+function taskRow(t){return `<div class="task-row">${check(t.id,t.done)}<span class="task-text${t.done?' done':''}">${t.text}</span>${badge(t.who)}</div>`}
+
+function renderHoy(){
+  const todayTasks=tasks.filter(t=>['1','2','3','4','5','7','8'].includes(String(t.id))||t.today);
+  document.getElementById('hoy-tasks').innerHTML=todayTasks.length?todayTasks.map(taskRow).join(''):'<div style="font-size:13px;color:#aaa;padding:8px 0">Sin tareas para hoy 🎉</div>';
+  const dow=now.getDay();
+  const menuIdx=dow===0?6:dow-1;
+  const m=menu[menuIdx];
+  document.getElementById('hoy-comida').textContent='Comida: '+m.comida;
+  document.getElementById('hoy-cena').textContent='Cena: '+m.cena;
+  document.getElementById('hoy-events').innerHTML=events.slice(0,2).map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div><div class="event-title">${e.title}</div><div class="event-meta">${e.meta}</div></div></div>`).join('');
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById('stat-pend').textContent=tasks.filter(t=>!t.done).length;
+  document.getElementById('stat-done').textContent=tasks.filter(t=>t.done).length;
+}
+
+function renderTareas(){
+  document.getElementById('tasks-hogar').innerHTML=tasks.filter(t=>t.cat==='hogar').map(taskRow).join('');
+  document.getElementById('tasks-ninos').innerHTML=tasks.filter(t=>t.cat==='ninos').map(taskRow).join('');
+}
+
+function renderMenu(){
+  const dow=now.getDay();
+  const todayIdx=dow===0?6:dow-1;
+  document.getElementById('menu-list').innerHTML=menu.map((m,i)=>`<div class="day-row${i===todayIdx?' today':''}"><div class="day-label">${m.d}</div><div class="day-meal">${m.comida} <span style="color:#bbb;font-size:11px">· ${m.cena}</span></div></div>`).join('');
+  document.getElementById('compra-list').innerHTML=compra.map(c=>`<div class="compra-item">${c}</div>`).join('');
+}
+
+function renderFamilia(){
+  const members=[
+    {key:'mama',ini:'M',name:'Mamá',sub:'Mercadona · Ama de casa'},
+    {key:'papa',ini:'MP',name:'Manuel (papá)',sub:'38 años'},
+    {key:'manuel',ini:'M',name:'Manuel',sub:'13 años'},
+    {key:'gonzalo',ini:'G',name:'Gonzalo',sub:'5 años'},
+  ];
+  document.getElementById('family-list').innerHTML=members.map(m=>{
+    const tot=tasks.filter(t=>t.who===m.key).length;
+    const don=tasks.filter(t=>t.who===m.key&&t.done).length;
+    const pct=tot?Math.round(don/tot*100):0;
+    return `<div class="member-row"><div class="avatar avatar-${m.key}">${m.ini}</div><div class="member-info"><div class="member-name">${m.name}</div><div class="member-sub">${m.sub}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><div class="progress-lbl">${don}/${tot} tareas · ${pct}%</div></div></div>`;
+  }).join('');
+  document.getElementById('events-list').innerHTML=events.map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div><div class="event-title">${e.title}</div><div class="event-meta">${e.meta}</div></div></div>`).join('');
+}
+
+function toggle(id){
+  const t=tasks.find(x=>x.id===id);
+  if(t){t.done=!t.done;saveTasks();}
+  renderAll();
+}
+
+function addTask(){
+  const txt=document.getElementById('new-task').value.trim();
+  const who=document.getElementById('new-who').value;
+  if(!txt)return;
+  tasks.push({id:Date.now(),text:txt,who,cat:'hogar',done:false,today:true});
+  document.getElementById('new-task').value='';
+  saveTasks();
+  renderAll();
+  showToast('Tarea añadida ✅');
+}
+
+function showTab(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.nav button')[['hoy','tareas','menu','familia'].indexOf(name)].classList.add('active');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();}
+renderAll();
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
