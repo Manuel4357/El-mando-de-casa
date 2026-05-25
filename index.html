@@ -634,8 +634,10 @@ function saveEvent(){
   const time=document.getElementById('ev-time').value;
   const who=document.getElementById('ev-who').value;
   if(!title||!date){showToast('Pon título y fecha ⚠️');return;}
-  events.push({title,date,time,who,color:selectedColor});
-  saveEvents();closeModal();renderAll();showToast('Evento añadido 📅');
+  events.push({title,date,time:time||'',who,color:selectedColor});
+  saveEvents();closeModal();renderAll();
+  scheduleNotifications();
+  showToast('Evento añadido 📅');
 }
 function deleteEvent(i){events.splice(i,1);saveEvents();renderAll();showToast('Evento eliminado');}
 
@@ -655,6 +657,28 @@ function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();}
 // Permitir Enter en onboarding
 document.getElementById('ob-nombre').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
 document.getElementById('ob-m-name').addEventListener('keydown',e=>{if(e.key==='Enter')obAddMember();});
+
+// ═══════════════════════════════════════
+//  NOTIFICACIONES
+// ═══════════════════════════════════════
+async function requestNotifPermission(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'default'){
+    await Notification.requestPermission();
+  }
+  scheduleNotifications();
+}
+
+function scheduleNotifications(){
+  if(Notification.permission !== 'granted') return;
+  if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then(reg => {
+    reg.active.postMessage({
+      type: 'SCHEDULE_NOTIFICATIONS',
+      events: events
+    });
+  });
+}
 
 // Arrancar
 obInit();
