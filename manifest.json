@@ -2,6 +2,7 @@
   "name": "El Mando de Casa",
   "short_name": "MandoCasa",
   "description": "Organiza tareas, menú y eventos de tu hogar familiar",
+  "id": "com.manuel.mandodecasa",
   "start_url": "/El-mando-de-casa/",
   "scope": "/El-mando-de-casa/",
   "display": "standalone",
@@ -9,7 +10,33 @@
   "background_color": "#f5f5f0",
   "theme_color": "#7F77DD",
   "lang": "es",
+  "categories": ["productivity", "lifestyle"],
+  "screenshots": [],
   "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icono.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icono.png",
       "sizes": "192x192",
