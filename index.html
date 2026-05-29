@@ -206,7 +206,61 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="ob-dots" id="ob-dots"></div>
     <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Continuar →</button>
     <button class="ob-skip" id="ob-skip-btn" onclick="obSkip()">Saltar introducción</button>
+    <!-- GASTOS -->
+  <div id="gastos" class="section">
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num" id="gasto-total">0€</div><div class="stat-lbl">Total este mes</div></div>
+      <div class="stat"><div class="stat-num" id="gasto-restante" style="color:#1D9E75">0€</div><div class="stat-lbl">Restante</div></div>
+    </div>
+    <!-- Barra de presupuesto -->
+    <div class="card">
+      <div class="card-title">🎯 Presupuesto mensual</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input id="presupuesto-input" type="number" placeholder="Ej: 2000" style="flex:1;font-size:15px;padding:8px 10px;border:1px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none">
+        <span style="font-size:14px;color:#888">€/mes</span>
+        <button onclick="savePresupuesto()" style="padding:8px 14px;border-radius:10px;border:none;background:#7F77DD;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Guardar</button>
+      </div>
+      <div class="progress-bar" style="margin-top:10px;height:8px">
+        <div class="progress-fill" id="presupuesto-bar" style="width:0%;background:#1D9E75;height:100%"></div>
+      </div>
+      <div id="presupuesto-msg" style="font-size:12px;color:#888;margin-top:4px"></div>
+    </div>
+    <!-- Por categoría -->
+    <div class="card">
+      <div class="card-title">🏷️ Por categoría</div>
+      <div id="gastos-cats"></div>
+    </div>
+    <!-- Lista de gastos -->
+    <div class="card">
+      <div class="card-title">📋 Gastos del mes</div>
+      <div id="gastos-list"></div>
+    </div>
+    <!-- Añadir gasto -->
+    <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
+      <div class="card-title">➕ Nuevo gasto</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+        <input id="gasto-desc" type="text" placeholder="Descripción (ej: Mercadona)" style="font-size:14px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
+        <div style="display:flex;gap:8px">
+          <input id="gasto-importe" type="number" placeholder="Importe €" step="0.01" style="flex:1;font-size:14px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
+          <select id="gasto-cat" style="flex:1;font-size:13px;padding:9px 8px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
+            <option value="comida">🛒 Comida</option>
+            <option value="hogar">🏠 Hogar</option>
+            <option value="ropa">👕 Ropa</option>
+            <option value="transporte">🚗 Transporte</option>
+            <option value="ocio">🎉 Ocio</option>
+            <option value="salud">💊 Salud</option>
+            <option value="otros">📦 Otros</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px">
+          <select id="gasto-who" style="flex:1;font-size:13px;padding:9px 8px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none"></select>
+          <button onclick="addGasto()" style="flex:1;padding:9px;border-radius:10px;border:none;background:#7F77DD;color:#fff;cursor:pointer;font-size:14px;font-weight:600">Añadir</button>
+        </div>
+      </div>
+    </div>
   </div>
+
+</div>
 </div>
 
 <!-- ══════════════ APP ══════════════ -->
@@ -224,6 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button onclick="showTab('tareas')"><span class="nav-icon">✅</span>Tareas</button>
     <button onclick="showTab('menu')"><span class="nav-icon">🍽️</span>Menú</button>
     <button onclick="showTab('familia')"><span class="nav-icon">👨‍👩‍👦</span>Familia</button>
+    <button onclick="showTab('gastos')"><span class="nav-icon">💰</span>Gastos</button>
   </div>
 
   <div id="hoy" class="section active">
@@ -645,14 +700,105 @@ function showTab(name){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById(name).classList.add('active');
-  document.querySelectorAll('.nav button')[['hoy','tareas','menu','familia'].indexOf(name)].classList.add('active');
+  document.querySelectorAll('.nav button')[['hoy','tareas','menu','familia','gastos'].indexOf(name)].classList.add('active');
 }
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();}
+// --- GASTOS ---
+const CAT_LABELS={comida:'🛒 Comida',hogar:'🏠 Hogar',ropa:'👕 Ropa',transporte:'🚗 Transporte',ocio:'🎉 Ocio',salud:'💊 Salud',otros:'📦 Otros'};
+const CAT_COLORS={comida:'#1D9E75',hogar:'#7F77DD',ropa:'#D4537E',transporte:'#185FA5',ocio:'#E8A838',salud:'#E07B4F',otros:'#888'};
+
+let gastos=JSON.parse(localStorage.getItem('mdc_gastos')||'[]');
+let presupuesto=parseFloat(localStorage.getItem('mdc_presupuesto')||'0');
+
+function saveGastos(){localStorage.setItem('mdc_gastos',JSON.stringify(gastos));}
+function savePresupuesto(){
+  const v=parseFloat(document.getElementById('presupuesto-input').value);
+  if(!v||v<=0){showToast('Pon un presupuesto válido ⚠️');return;}
+  presupuesto=v;
+  localStorage.setItem('mdc_presupuesto',v);
+  renderGastos();
+  showToast('Presupuesto guardado ✅');
+}
+
+function addGasto(){
+  const desc=document.getElementById('gasto-desc').value.trim();
+  const importe=parseFloat(document.getElementById('gasto-importe').value);
+  const cat=document.getElementById('gasto-cat').value;
+  const who=document.getElementById('gasto-who').value;
+  if(!desc||!importe||importe<=0){showToast('Rellena todos los campos ⚠️');return;}
+  const now2=new Date();
+  gastos.push({id:Date.now(),desc,importe,cat,who,date:`${now2.getFullYear()}-${String(now2.getMonth()+1).padStart(2,'0')}-${String(now2.getDate()).padStart(2,'0')}`});
+  document.getElementById('gasto-desc').value='';
+  document.getElementById('gasto-importe').value='';
+  saveGastos();renderGastos();
+  showToast('Gasto añadido 💰');
+}
+
+function deleteGasto(id){
+  gastos=gastos.filter(g=>g.id!==id);
+  saveGastos();renderGastos();
+  showToast('Gasto eliminado');
+}
+
+function renderGastos(){
+  // Solo gastos del mes actual
+  const mes=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const mesGastos=gastos.filter(g=>g.date.startsWith(mes));
+  const total=mesGastos.reduce((s,g)=>s+g.importe,0);
+
+  // Stats
+  document.getElementById('gasto-total').textContent=total.toFixed(2)+'€';
+  const restante=presupuesto-total;
+  const restEl=document.getElementById('gasto-restante');
+  restEl.textContent=(presupuesto>0?(restante>=0?restante.toFixed(2):'-'+Math.abs(restante).toFixed(2)):'—')+'€';
+  restEl.style.color=restante>=0?'#1D9E75':'#e74c3c';
+
+  // Presupuesto
+  if(presupuesto>0){
+    document.getElementById('presupuesto-input').value=presupuesto;
+    const pct=Math.min(100,Math.round(total/presupuesto*100));
+    const bar=document.getElementById('presupuesto-bar');
+    bar.style.width=pct+'%';
+    bar.style.background=pct>=100?'#e74c3c':pct>=80?'#E8A838':'#1D9E75';
+    document.getElementById('presupuesto-msg').textContent=pct+'% del presupuesto usado'+(pct>=100?' — ⚠️ Te has pasado!':'');
+  }
+
+  // Por categoría
+  const cats={};
+  mesGastos.forEach(g=>{cats[g.cat]=(cats[g.cat]||0)+g.importe;});
+  document.getElementById('gastos-cats').innerHTML=Object.keys(cats).length
+    ?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f0ec">
+        <span style="font-size:13px;flex:1;color:#1a1a1a">${CAT_LABELS[cat]||cat}</span>
+        <span style="font-size:13px;font-weight:600;color:${CAT_COLORS[cat]||'#888'}">${amt.toFixed(2)}€</span>
+      </div>`).join('')
+    :'<div class="empty-msg">Sin gastos este mes</div>';
+
+  // Lista
+  document.getElementById('gastos-list').innerHTML=mesGastos.length
+    ?[...mesGastos].reverse().map(g=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec">
+        <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[g.cat]||'#888'};flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-size:14px;color:#1a1a1a">${g.desc}</div>
+          <div style="font-size:11px;color:#aaa">${CAT_LABELS[g.cat]||g.cat} · ${memberLabel(g.who)} · ${fmtDate(g.date)}</div>
+        </div>
+        <span style="font-size:14px;font-weight:600;color:#1a1a1a">${g.importe.toFixed(2)}€</span>
+        <button onclick="deleteGasto(${g.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
+      </div>`).join('')
+    :'<div class="empty-msg">Sin gastos registrados</div>';
+
+  // Poblar select de quién
+  if(family.length){
+    document.getElementById('gasto-who').innerHTML=family.map(m=>`<option value="${m.key}">${m.name}</option>`).join('');
+  }
+}
+
+function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();renderGastos();}
 
 // Permitir Enter en onboarding
 document.getElementById('ob-nombre').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
