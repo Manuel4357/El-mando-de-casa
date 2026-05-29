@@ -201,6 +201,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
     <div class="card"><div class="card-title">⚡ Tareas de hoy</div><div id="hoy-tasks"></div></div>
     <div class="card">
+      <div class="card-title">💊 Medicación de hoy</div>
+      <div id="hoy-med"></div>
+    </div>
+    <div class="card">
       <div class="card-title">🍽️ Menú de hoy</div>
       <div style="font-size:15px;font-weight:600" id="hoy-comida"></div>
       <div style="font-size:13px;color:#888;margin-top:4px" id="hoy-cena"></div>
@@ -274,6 +278,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="btn-full btn-purple" style="margin-top:12px" onclick="openModal()">+ Añadir evento</button>
     </div>
     <div class="card">
+      <div class="card-title">💊 Medicación</div>
+      <div id="med-list"></div>
+      <button class="btn-full btn-purple" style="margin-top:12px" onclick="openMedModal()">+ Añadir medicamento</button>
+    </div>
+    <div class="card">
       <div class="card-title">🎂 Cumpleaños</div>
       <div id="cumples-list"></div>
       <button class="btn-full btn-purple" style="margin-top:12px" onclick="openCumpleModal()">+ Añadir cumpleaños</button>
@@ -321,6 +330,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 
 </div>
+</div>
+
+<!-- MODAL MEDICAMENTO -->
+<div class="modal-bg" id="med-modal-bg" onclick="closeMedModalBg(event)">
+  <div class="modal">
+    <h3>💊 Nuevo medicamento</h3>
+    <label>Nombre del medicamento</label>
+    <input id="med-nombre" type="text" placeholder="Ej: Ibuprofeno, Vitamina D...">
+    <label>Persona</label>
+    <select id="med-who"></select>
+    <label>Dosis (escribe las horas separadas por coma)</label>
+    <input id="med-horas" type="text" placeholder="Ej: 08:00, 14:00, 21:00">
+    <label>Notas (opcional)</label>
+    <input id="med-notas" type="text" placeholder="Ej: Con comida, 1 comprimido...">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeMedModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveMed()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL CUMPLEAÑOS -->
@@ -455,7 +483,7 @@ const CAT_LABELS={comida:'🛒 Comida',hogar:'🏠 Hogar',ropa:'👕 Ropa',trans
 const CAT_COLORS={comida:'#1D9E75',hogar:'#7F77DD',ropa:'#D4537E',transporte:'#185FA5',ocio:'#E8A838',salud:'#E07B4F',otros:'#888'};
 const now=new Date();
 
-let family=[], tasks=[], menuData={}, compra=[], events=[], gastos=[], presupuesto=0, cumples=[];
+let family=[], tasks=[], menuData={}, compra=[], events=[], gastos=[], presupuesto=0, cumples=[], meds=[], medTaken={};
 
 function initApp(){
   family=JSON.parse(localStorage.getItem('mdc_family')||'[]');
@@ -467,6 +495,8 @@ function initApp(){
   gastos=JSON.parse(localStorage.getItem('mdc_gastos')||'[]');
   presupuesto=parseFloat(localStorage.getItem('mdc_presupuesto')||'0');
   cumples=JSON.parse(localStorage.getItem('mdc_cumples')||'[]');
+  meds=JSON.parse(localStorage.getItem('mdc_meds')||'[]');
+  medTaken=JSON.parse(localStorage.getItem('mdc_med_taken')||'{}');
 
   const hogar=localStorage.getItem('mdc_hogar')||'El Mando de Casa';
   document.getElementById('app-title').textContent='🏠 '+hogar;
@@ -484,6 +514,7 @@ function populateSelects(){
   document.getElementById('new-who').innerHTML=opts;
   document.getElementById('ev-who').innerHTML=`<option value="todos">Toda la familia</option>`+opts;
   document.getElementById('gasto-who').innerHTML=opts;
+  document.getElementById('med-who').innerHTML=opts;
 }
 
 function memberLabel(key){const m=family.find(f=>f.key===key);return m?m.name:key;}
@@ -501,11 +532,14 @@ function saveCompra(){localStorage.setItem('mdc_compra',JSON.stringify(compra));
 function saveEvents(){localStorage.setItem('mdc_events',JSON.stringify(events));}
 function saveGastos(){localStorage.setItem('mdc_gastos',JSON.stringify(gastos));}
 function saveCumples(){localStorage.setItem('mdc_cumples',JSON.stringify(cumples));}
+function saveMeds(){localStorage.setItem('mdc_meds',JSON.stringify(meds));}
+function saveMedTaken(){localStorage.setItem('mdc_med_taken',JSON.stringify(medTaken));}
 
 // HOY
 function renderHoy(){
   const todayTasks=tasks.filter(t=>t.hoy||t.today);
   document.getElementById('hoy-tasks').innerHTML=todayTasks.length?todayTasks.map(taskRow).join(''):'<div class="empty-msg">Sin tareas para hoy 🎉</div>';
+  renderHoyMed();
   const dow=now.getDay();
   const menuIdx=dow===0?6:dow-1;
   const m=menuData[MENU_KEYS[menuIdx]];
@@ -636,6 +670,7 @@ function renderFamilia(){
     ?sorted.map((e,i)=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div style="flex:1"><div class="event-title">${e.title}</div><div class="event-meta">${fmtDate(e.date)}${e.time?' · '+e.time:''}</div></div><button class="event-del" onclick="deleteEvent(${i})">✕</button></div>`).join('')
     :'<div class="empty-msg">Sin eventos — añade el primero</div>';
   renderCumples();
+  renderMeds();
 }
 
 // EVENTOS
@@ -735,6 +770,99 @@ function renderGastos(){
     :'<div class="empty-msg">Sin gastos registrados</div>';
 }
 
+// MEDICACIÓN
+const todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+
+function openMedModal(){
+  document.getElementById('med-nombre').value='';
+  document.getElementById('med-horas').value='';
+  document.getElementById('med-notas').value='';
+  document.getElementById('med-modal-bg').classList.add('open');
+}
+function closeMedModal(){document.getElementById('med-modal-bg').classList.remove('open');}
+function closeMedModalBg(e){if(e.target===document.getElementById('med-modal-bg'))closeMedModal();}
+
+function saveMed(){
+  const nombre=document.getElementById('med-nombre').value.trim();
+  const who=document.getElementById('med-who').value;
+  const horasRaw=document.getElementById('med-horas').value;
+  const notas=document.getElementById('med-notas').value.trim();
+  if(!nombre||!horasRaw){showToast('Pon nombre y al menos una hora ⚠️');return;}
+  const horas=horasRaw.split(',').map(h=>h.trim()).filter(h=>h);
+  meds.push({id:Date.now(),nombre,who,horas,notas});
+  saveMeds();closeMedModal();renderFamilia();renderHoy();
+  scheduleNotifications();
+  showToast('Medicamento añadido 💊');
+}
+
+function deleteMed(id){
+  meds=meds.filter(m=>m.id!==id);
+  saveMeds();renderFamilia();renderHoy();showToast('Medicamento eliminado');
+}
+
+function toggleMedTaken(medId, horaIdx){
+  const key=medId+'-'+horaIdx+'-'+todayKey;
+  medTaken[key]=!medTaken[key];
+  saveMedTaken();renderHoy();renderMeds();
+}
+
+function isTaken(medId, horaIdx){
+  return !!medTaken[medId+'-'+horaIdx+'-'+todayKey];
+}
+
+function renderMeds(){
+  if(!document.getElementById('med-list'))return;
+  const byMember={};
+  meds.forEach(m=>{
+    if(!byMember[m.who])byMember[m.who]=[];
+    byMember[m.who].push(m);
+  });
+  document.getElementById('med-list').innerHTML=Object.keys(byMember).length
+    ?Object.entries(byMember).map(([who,ms])=>`
+      <div style="margin-bottom:10px">
+        <div style="font-size:12px;font-weight:600;color:${memberColor(who)};margin-bottom:6px">${memberLabel(who)}</div>
+        ${ms.map(m=>`
+          <div style="background:#f9f9f7;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:14px;font-weight:600;flex:1">${m.nombre}</span>
+              <button onclick="deleteMed(${m.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
+            </div>
+            ${m.notas?`<div style="font-size:12px;color:#888;margin-top:2px">${m.notas}</div>`:''}
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+              ${m.horas.map((h,i)=>`
+                <div onclick="toggleMedTaken(${m.id},${i})" style="padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:${isTaken(m.id,i)?'#1D9E75':'#e0e0e0'};color:${isTaken(m.id,i)?'#fff':'#555'}">
+                  ${h} ${isTaken(m.id,i)?'✓':''}
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>`).join('')
+    :'<div class="empty-msg">Sin medicamentos registrados</div>';
+}
+
+function renderHoyMed(){
+  const pending=[];
+  meds.forEach(m=>{
+    m.horas.forEach((h,i)=>{
+      if(!isTaken(m.id,i)) pending.push({med:m,hora:h,idx:i});
+    });
+  });
+  const el=document.getElementById('hoy-med');
+  if(!el)return;
+  el.innerHTML=pending.length
+    ?pending.sort((a,b)=>a.hora.localeCompare(b.hora)).map(p=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f0ec">
+        <div style="font-size:20px">💊</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:500">${p.med.nombre}</div>
+          <div style="font-size:12px;color:#888">${memberLabel(p.med.who)} · ${p.hora}</div>
+        </div>
+        <div onclick="toggleMedTaken(${p.med.id},${p.idx})" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:#f0f0ec;color:#555">
+          Tomar
+        </div>
+      </div>`).join('')
+    :'<div class="empty-msg">Toda la medicación tomada ✅</div>';
+}
+
 // CUMPLEAÑOS
 const CUMPLE_REL={familia:'👨‍👩‍👦 Familia',amigo:'👫 Amigo/a',trabajo:'💼 Trabajo',otro:'🙂 Otro'};
 
@@ -826,7 +954,7 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();renderGastos();}
+function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();renderGastos();renderMeds();}
 
 document.getElementById('ob-nombre').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
 document.getElementById('ob-m-name').addEventListener('keydown',e=>{if(e.key==='Enter')obAddMember();});
