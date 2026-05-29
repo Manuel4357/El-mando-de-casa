@@ -530,6 +530,7 @@ function populateSelects(){
   const opts = family.map(m=>`<option value="${m.key}">${m.name}</option>`).join('');
   document.getElementById('new-who').innerHTML=opts;
   document.getElementById('ev-who').innerHTML=`<option value="todos">Toda la familia</option>`+opts;
+  document.getElementById('gasto-who').innerHTML=opts;
 }
 
 function memberLabel(key){
@@ -791,11 +792,6 @@ function renderGastos(){
         <button onclick="deleteGasto(${g.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
       </div>`).join('')
     :'<div class="empty-msg">Sin gastos registrados</div>';
-
-  // Poblar select de quién
-  if(family.length){
-    document.getElementById('gasto-who').innerHTML=family.map(m=>`<option value="${m.key}">${m.name}</option>`).join('');
-  }
 }
 
 function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();renderGastos();}
