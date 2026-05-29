@@ -19,8 +19,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 #onboarding.hidden{display:none}
 .ob-track{display:flex;flex:1;transition:transform .4s cubic-bezier(.4,0,.2,1)}
 .ob-slide{min-width:100vw;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px 20px;text-align:center}
-.ob-emoji{font-size:72px;margin-bottom:24px;animation:pop .4s ease}
-@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.ob-emoji{font-size:72px;margin-bottom:24px}
 .ob-title{font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:10px}
 .ob-sub{font-size:15px;color:#888;line-height:1.65;max-width:300px}
 .ob-form{width:100%;max-width:340px;margin-top:28px;text-align:left}
@@ -41,9 +40,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .ob-add-row select{font-size:13px;padding:10px 8px;border:1.5px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none;font-family:inherit}
 .ob-add-row button{padding:10px 14px;border-radius:10px;border:none;background:#7F77DD;color:#fff;font-size:18px;cursor:pointer;font-weight:600}
 .ob-footer{padding:20px 28px 36px;display:flex;flex-direction:column;align-items:center;gap:12px}
-.ob-btn{width:100%;max-width:340px;padding:14px;border-radius:14px;border:none;background:#7F77DD;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.ob-btn{width:100%;max-width:340px;padding:14px;border-radius:14px;border:none;background:#7F77DD;color:#fff;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
 .ob-btn:active{background:#6a63c5}
-.ob-btn.secondary{background:#f0f0ec;color:#555}
 .ob-dots{display:flex;gap:6px}
 .ob-dot{width:8px;height:8px;border-radius:50%;background:#e0e0e0;transition:background .3s,width .3s}
 .ob-dot.active{background:#7F77DD;width:20px;border-radius:4px}
@@ -51,14 +49,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 /* APP */
 #app{display:none}
-#app.visible{display:block}
 .app{max-width:420px;margin:0 auto;padding:16px 12px 80px}
 .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .header-title{font-size:20px;font-weight:600;color:#1a1a1a}
 .header-date{font-size:12px;color:#888;margin-top:2px}
-.nav{display:flex;gap:6px;margin-bottom:16px;background:#e8e8e3;border-radius:14px;padding:4px;position:sticky;top:8px;z-index:10}
-.nav button{flex:1;padding:8px 4px;border:none;background:transparent;border-radius:10px;font-size:11px;color:#666;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
-.nav button .nav-icon{font-size:18px}
+.nav{display:flex;gap:4px;margin-bottom:16px;background:#e8e8e3;border-radius:14px;padding:4px;position:sticky;top:8px;z-index:10}
+.nav button{flex:1;padding:6px 2px;border:none;background:transparent;border-radius:10px;font-size:10px;color:#666;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav button .nav-icon{font-size:16px}
 .nav button.active{background:#fff;color:#1a1a1a;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
 .section{display:none}.section.active{display:block}
 .card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
@@ -101,8 +98,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .progress-bar{height:4px;background:#f0f0ec;border-radius:2px;margin-top:6px;overflow:hidden}
 .progress-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width .4s}
 .progress-lbl{font-size:11px;color:#aaa;margin-top:3px}
-.compra-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;color:#555}
-.compra-item:last-child{border-bottom:none}
 .btn-full{width:100%;padding:10px;border-radius:10px;border:1px solid #e0e0e0;background:#f9f9f7;color:#555;cursor:pointer;font-size:13px;margin-top:8px;font-family:inherit}
 .btn-purple{background:#7F77DD;color:#fff;border:none}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
@@ -122,22 +117,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .modal-btns button{flex:1;padding:10px;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit;font-weight:500}
 .btn-cancel{border:1px solid #e0e0e0;background:#f9f9f7;color:#555}
 .btn-save{border:none;background:#7F77DD;color:#fff}
+.gasto-form-input{width:100%;font-size:14px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none;font-family:inherit;margin-bottom:8px}
+.gasto-form-input:focus{border-color:#7F77DD}
 </style>
 </head>
 <body>
 
-<!-- ══════════════ ONBOARDING ══════════════ -->
+<!-- ONBOARDING -->
 <div id="onboarding">
   <div class="ob-track" id="ob-track">
-
-    <!-- Slide 0: Bienvenida -->
     <div class="ob-slide">
       <div class="ob-emoji">🏠</div>
       <div class="ob-title">Bienvenido a<br>El Mando de Casa</div>
-      <div class="ob-sub">Tu asistente familiar para organizar tareas, menús y eventos del hogar. En 3 pasos lo dejamos listo.</div>
+      <div class="ob-sub">Tu asistente familiar para organizar tareas, menús, gastos y eventos del hogar.</div>
     </div>
-
-    <!-- Slide 1: Nombre del hogar / persona principal -->
     <div class="ob-slide">
       <div class="ob-emoji">👤</div>
       <div class="ob-title">¿Cómo te llamas?</div>
@@ -146,11 +139,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <label class="ob-label">Tu nombre</label>
         <input class="ob-input" id="ob-nombre" type="text" placeholder="Ej: María, Mamá...">
         <label class="ob-label">Nombre del hogar (opcional)</label>
-        <input class="ob-input" id="ob-hogar" type="text" placeholder="Ej: Casa García, Mi Casa...">
+        <input class="ob-input" id="ob-hogar" type="text" placeholder="Ej: Casa García...">
       </div>
     </div>
-
-    <!-- Slide 2: Miembros de la familia -->
     <div class="ob-slide" style="justify-content:flex-start;padding-top:40px">
       <div class="ob-emoji">👨‍👩‍👦</div>
       <div class="ob-title">¿Quién vive contigo?</div>
@@ -167,103 +158,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <button onclick="obAddMember()">+</button>
       </div>
     </div>
-
-    <!-- Slide 3: Tour de la app -->
-    <div class="ob-slide">
-      <div class="ob-emoji">☀️</div>
-      <div class="ob-title">Sección Hoy</div>
-      <div class="ob-sub">Ve de un vistazo las tareas del día, qué hay de comer y los próximos eventos de la familia.</div>
-    </div>
-
-    <div class="ob-slide">
-      <div class="ob-emoji">✅</div>
-      <div class="ob-title">Sección Tareas</div>
-      <div class="ob-sub">Crea tareas del hogar y asígnalas a cada miembro. Márcalas como hechas con un toque.</div>
-    </div>
-
-    <div class="ob-slide">
-      <div class="ob-emoji">🍽️</div>
-      <div class="ob-title">Sección Menú</div>
-      <div class="ob-sub">Planifica comidas y cenas de toda la semana. Añade los productos que necesitas a la lista de la compra.</div>
-    </div>
-
-    <div class="ob-slide">
-      <div class="ob-emoji">📅</div>
-      <div class="ob-title">Sección Familia</div>
-      <div class="ob-sub">Gestiona los eventos del calendario familiar y ve el progreso de tareas de cada miembro.</div>
-    </div>
-
-    <!-- Slide final -->
+    <div class="ob-slide"><div class="ob-emoji">☀️</div><div class="ob-title">Sección Hoy</div><div class="ob-sub">Ve de un vistazo las tareas del día, qué hay de comer y los próximos eventos.</div></div>
+    <div class="ob-slide"><div class="ob-emoji">✅</div><div class="ob-title">Sección Tareas</div><div class="ob-sub">Crea tareas y asígnalas a cada miembro. Márcalas como hechas con un toque.</div></div>
+    <div class="ob-slide"><div class="ob-emoji">🍽️</div><div class="ob-title">Sección Menú</div><div class="ob-sub">Planifica comidas y cenas de toda la semana y gestiona la lista de la compra.</div></div>
+    <div class="ob-slide"><div class="ob-emoji">💰</div><div class="ob-title">Sección Gastos</div><div class="ob-sub">Controla los gastos del hogar por categoría y fija un presupuesto mensual.</div></div>
     <div class="ob-slide">
       <div class="ob-emoji">🎉</div>
       <div class="ob-title" id="ob-final-title">¡Todo listo!</div>
-      <div class="ob-sub" id="ob-final-sub">Ya puedes empezar a organizar tu hogar. ¡Que vaya todo genial!</div>
+      <div class="ob-sub" id="ob-final-sub">Tu hogar ya está configurado. ¡A por ello!</div>
     </div>
-
   </div>
-
   <div class="ob-footer">
     <div class="ob-dots" id="ob-dots"></div>
     <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Continuar →</button>
     <button class="ob-skip" id="ob-skip-btn" onclick="obSkip()">Saltar introducción</button>
-    <!-- GASTOS -->
-  <div id="gastos" class="section">
-    <div class="stat-grid">
-      <div class="stat"><div class="stat-num" id="gasto-total">0€</div><div class="stat-lbl">Total este mes</div></div>
-      <div class="stat"><div class="stat-num" id="gasto-restante" style="color:#1D9E75">0€</div><div class="stat-lbl">Restante</div></div>
-    </div>
-    <!-- Barra de presupuesto -->
-    <div class="card">
-      <div class="card-title">🎯 Presupuesto mensual</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input id="presupuesto-input" type="number" placeholder="Ej: 2000" style="flex:1;font-size:15px;padding:8px 10px;border:1px solid #e0e0e0;border-radius:10px;background:#f9f9f7;color:#1a1a1a;outline:none">
-        <span style="font-size:14px;color:#888">€/mes</span>
-        <button onclick="savePresupuesto()" style="padding:8px 14px;border-radius:10px;border:none;background:#7F77DD;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Guardar</button>
-      </div>
-      <div class="progress-bar" style="margin-top:10px;height:8px">
-        <div class="progress-fill" id="presupuesto-bar" style="width:0%;background:#1D9E75;height:100%"></div>
-      </div>
-      <div id="presupuesto-msg" style="font-size:12px;color:#888;margin-top:4px"></div>
-    </div>
-    <!-- Por categoría -->
-    <div class="card">
-      <div class="card-title">🏷️ Por categoría</div>
-      <div id="gastos-cats"></div>
-    </div>
-    <!-- Lista de gastos -->
-    <div class="card">
-      <div class="card-title">📋 Gastos del mes</div>
-      <div id="gastos-list"></div>
-    </div>
-    <!-- Añadir gasto -->
-    <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
-      <div class="card-title">➕ Nuevo gasto</div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
-        <input id="gasto-desc" type="text" placeholder="Descripción (ej: Mercadona)" style="font-size:14px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
-        <div style="display:flex;gap:8px">
-          <input id="gasto-importe" type="number" placeholder="Importe €" step="0.01" style="flex:1;font-size:14px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
-          <select id="gasto-cat" style="flex:1;font-size:13px;padding:9px 8px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none">
-            <option value="comida">🛒 Comida</option>
-            <option value="hogar">🏠 Hogar</option>
-            <option value="ropa">👕 Ropa</option>
-            <option value="transporte">🚗 Transporte</option>
-            <option value="ocio">🎉 Ocio</option>
-            <option value="salud">💊 Salud</option>
-            <option value="otros">📦 Otros</option>
-          </select>
-        </div>
-        <div style="display:flex;gap:8px">
-          <select id="gasto-who" style="flex:1;font-size:13px;padding:9px 8px;border:1px solid #e0e0e0;border-radius:10px;background:#fff;color:#1a1a1a;outline:none"></select>
-          <button onclick="addGasto()" style="flex:1;padding:9px;border-radius:10px;border:none;background:#7F77DD;color:#fff;cursor:pointer;font-size:14px;font-weight:600">Añadir</button>
-        </div>
-      </div>
-    </div>
   </div>
-
-</div>
 </div>
 
-<!-- ══════════════ APP ══════════════ -->
+<!-- APP -->
 <div id="app">
 <div class="app">
   <div class="header">
@@ -272,7 +184,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="header-date" id="fecha"></div>
     </div>
   </div>
-
   <div class="nav">
     <button class="active" onclick="showTab('hoy')"><span class="nav-icon">☀️</span>Hoy</button>
     <button onclick="showTab('tareas')"><span class="nav-icon">✅</span>Tareas</button>
@@ -281,35 +192,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <button onclick="showTab('gastos')"><span class="nav-icon">💰</span>Gastos</button>
   </div>
 
+  <!-- HOY -->
   <div id="hoy" class="section active">
     <div class="stat-grid">
       <div class="stat"><div class="stat-num" id="stat-pend">0</div><div class="stat-lbl">Pendientes</div></div>
       <div class="stat"><div class="stat-num" id="stat-done">0</div><div class="stat-lbl">Completadas</div></div>
     </div>
-    <div class="card">
-      <div class="card-title">⚡ Tareas de hoy</div>
-      <div id="hoy-tasks"></div>
-    </div>
+    <div class="card"><div class="card-title">⚡ Tareas de hoy</div><div id="hoy-tasks"></div></div>
     <div class="card">
       <div class="card-title">🍽️ Menú de hoy</div>
       <div style="font-size:15px;font-weight:600" id="hoy-comida"></div>
       <div style="font-size:13px;color:#888;margin-top:4px" id="hoy-cena"></div>
     </div>
-    <div class="card">
-      <div class="card-title">📅 Próximos eventos</div>
-      <div id="hoy-events"></div>
-    </div>
+    <div class="card"><div class="card-title">📅 Próximos eventos</div><div id="hoy-events"></div></div>
   </div>
 
+  <!-- TAREAS -->
   <div id="tareas" class="section">
-    <div class="card">
-      <div class="card-title">🏠 Hogar</div>
-      <div id="tasks-hogar"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">👦 Niños / Familia</div>
-      <div id="tasks-ninos"></div>
-    </div>
+    <div class="card"><div class="card-title">🏠 Hogar</div><div id="tasks-hogar"></div></div>
+    <div class="card"><div class="card-title">👦 Familia</div><div id="tasks-ninos"></div></div>
     <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
       <div class="card-title">➕ Nueva tarea</div>
       <div class="add-row">
@@ -320,6 +221,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
   </div>
 
+  <!-- MENÚ -->
   <div id="menu" class="section">
     <div class="card">
       <div class="card-title">🗓️ Menú semanal <span style="font-size:11px;color:#bbb;text-transform:none;letter-spacing:0;font-weight:400;margin-left:4px">— toca ✏ para editar</span></div>
@@ -335,17 +237,56 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
   </div>
 
+  <!-- FAMILIA -->
   <div id="familia" class="section">
-    <div class="card">
-      <div class="card-title">👨‍👩‍👦 Miembros</div>
-      <div id="family-list"></div>
-    </div>
+    <div class="card"><div class="card-title">👨‍👩‍👦 Miembros</div><div id="family-list"></div></div>
     <div class="card">
       <div class="card-title">📅 Eventos</div>
       <div id="events-list"></div>
       <button class="btn-full btn-purple" style="margin-top:12px" onclick="openModal()">+ Añadir evento</button>
     </div>
   </div>
+
+  <!-- GASTOS -->
+  <div id="gastos" class="section">
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num" id="gasto-total">0€</div><div class="stat-lbl">Total este mes</div></div>
+      <div class="stat"><div class="stat-num" id="gasto-restante" style="color:#1D9E75">—€</div><div class="stat-lbl">Restante</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Presupuesto mensual</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input id="presupuesto-input" type="number" placeholder="Ej: 2000" class="gasto-form-input" style="margin-bottom:0;flex:1">
+        <span style="font-size:14px;color:#888;flex-shrink:0">€/mes</span>
+        <button onclick="savePresupuesto()" class="btn-full btn-purple" style="margin-top:0;width:auto;padding:9px 14px">Guardar</button>
+      </div>
+      <div class="progress-bar" style="margin-top:10px;height:8px"><div id="presupuesto-bar" style="height:100%;width:0%;background:#1D9E75;border-radius:2px;transition:width .4s"></div></div>
+      <div id="presupuesto-msg" style="font-size:12px;color:#888;margin-top:4px"></div>
+    </div>
+    <div class="card"><div class="card-title">🏷️ Por categoría</div><div id="gastos-cats"></div></div>
+    <div class="card"><div class="card-title">📋 Gastos del mes</div><div id="gastos-list"></div></div>
+    <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
+      <div class="card-title">➕ Nuevo gasto</div>
+      <input id="gasto-desc" type="text" placeholder="Descripción (ej: Mercadona)" class="gasto-form-input">
+      <div style="display:flex;gap:8px">
+        <input id="gasto-importe" type="number" placeholder="Importe €" step="0.01" class="gasto-form-input" style="flex:1">
+        <select id="gasto-cat" class="gasto-form-input" style="flex:1">
+          <option value="comida">🛒 Comida</option>
+          <option value="hogar">🏠 Hogar</option>
+          <option value="ropa">👕 Ropa</option>
+          <option value="transporte">🚗 Transporte</option>
+          <option value="ocio">🎉 Ocio</option>
+          <option value="salud">💊 Salud</option>
+          <option value="otros">📦 Otros</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px">
+        <select id="gasto-who" class="gasto-form-input" style="flex:1;margin-bottom:0"></select>
+        <button onclick="addGasto()" class="btn-full btn-purple" style="margin-top:0;flex:1">Añadir</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -355,14 +296,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="modal-bg" id="modal-bg" onclick="closeModalBg(event)">
   <div class="modal">
     <h3>📅 Nuevo evento</h3>
-    <label>Título</label>
-    <input id="ev-title" type="text" placeholder="Ej: Médico">
-    <label>Fecha</label>
-    <input id="ev-date" type="date">
-    <label>Hora (opcional)</label>
-    <input id="ev-time" type="time">
-    <label>Persona</label>
-    <select id="ev-who"></select>
+    <label>Título</label><input id="ev-title" type="text" placeholder="Ej: Médico">
+    <label>Fecha</label><input id="ev-date" type="date">
+    <label>Hora (opcional — sin hora avisa a las 14:00)</label><input id="ev-time" type="time">
+    <label>Persona</label><select id="ev-who"></select>
     <label>Color</label>
     <div class="color-row">
       <div class="color-dot selected" style="background:#7F77DD" data-color="#7F77DD" onclick="selectColor(this)"></div>
@@ -380,237 +317,181 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <script>
 // ═══════════════════════════════════════
-//  ONBOARDING
+// ONBOARDING
 // ═══════════════════════════════════════
-const TOTAL_SLIDES = 8;
-let obCurrent = 0;
-let obMembers = []; // miembros añadidos durante onboarding
-
-const ROLE_EMOJIS = {papa:'👨',hijo:'👦',hija:'👧',abuelo:'👴',abuela:'👵',otro:'🙂'};
-const ROLE_LABELS = {papa:'Papá',hijo:'Hijo/a',abuelo:'Abuelo/a',otro:'Otro'};
-const COLORS_BY_INDEX = ['#7F77DD','#1D9E75','#185FA5','#D4537E','#E8A838','#E07B4F','#5BAACC'];
+const TOTAL_SLIDES=8;
+let obCurrent=0;
+let obMembers=[];
+const ROLE_EMOJIS={papa:'👨',hijo:'👦',abuelo:'👴',otro:'🙂'};
+const ROLE_LABELS={papa:'Papá',hijo:'Hijo/a',abuelo:'Abuelo/a',otro:'Otro'};
+const OB_COLORS=['#7F77DD','#1D9E75','#185FA5','#D4537E','#E8A838','#E07B4F'];
 
 function obInit(){
-  // Si ya completó el onboarding, ir directo a la app
   if(localStorage.getItem('mdc_setup_done')){
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('app').style.display='block';
-    initApp();
-    return;
+    initApp();return;
   }
-  renderObDots();
-  obGoTo(0);
+  renderObDots();obGoTo(0);
 }
 
 function renderObDots(){
-  const c = document.getElementById('ob-dots');
-  c.innerHTML = Array.from({length:TOTAL_SLIDES},(_,i)=>`<div class="ob-dot${i===0?' active':''}" id="dot-${i}"></div>`).join('');
+  document.getElementById('ob-dots').innerHTML=Array.from({length:TOTAL_SLIDES},(_,i)=>`<div class="ob-dot${i===0?' active':''}" id="dot-${i}"></div>`).join('');
 }
 
 function obGoTo(n){
-  obCurrent = n;
+  obCurrent=n;
   document.getElementById('ob-track').style.transform=`translateX(-${n*100}vw)`;
   document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
-  const btn = document.getElementById('ob-next-btn');
-  const skip = document.getElementById('ob-skip-btn');
-  if(n === TOTAL_SLIDES-1){
-    btn.textContent = '¡Empezar! 🚀';
-    skip.style.display='none';
+  const btn=document.getElementById('ob-next-btn');
+  const skip=document.getElementById('ob-skip-btn');
+  if(n===TOTAL_SLIDES-1){
+    btn.textContent='¡Empezar! 🚀';skip.style.display='none';
+    const nombre=document.getElementById('ob-nombre').value.trim()||'campeona';
+    document.getElementById('ob-final-title').textContent='¡Todo listo, '+nombre+'!';
   } else {
-    btn.textContent = 'Continuar →';
-    skip.style.display='block';
-  }
-  // Actualizar título final con el nombre
-  if(n === TOTAL_SLIDES-1){
-    const nombre = document.getElementById('ob-nombre').value.trim() || 'campeona';
-    document.getElementById('ob-final-title').textContent = `¡Todo listo, ${nombre}!`;
-    document.getElementById('ob-final-sub').textContent = `Tu hogar ya está configurado. ¡A por ello!`;
+    btn.textContent='Continuar →';skip.style.display='block';
   }
 }
 
 function obNext(){
-  // Validación slide 1
-  if(obCurrent===1){
-    const nombre = document.getElementById('ob-nombre').value.trim();
-    if(!nombre){showToast('Escribe tu nombre para continuar 😊');return;}
-  }
-  if(obCurrent < TOTAL_SLIDES-1){
-    obGoTo(obCurrent+1);
-  } else {
-    obFinish();
-  }
+  if(obCurrent===1&&!document.getElementById('ob-nombre').value.trim()){showToast('Escribe tu nombre 😊');return;}
+  if(obCurrent<TOTAL_SLIDES-1) obGoTo(obCurrent+1); else obFinish();
 }
-
 function obSkip(){obFinish();}
 
 function obAddMember(){
-  const name = document.getElementById('ob-m-name').value.trim();
-  const role = document.getElementById('ob-m-role').value;
-  if(!name) return;
-  obMembers.push({name, role, color: COLORS_BY_INDEX[obMembers.length % COLORS_BY_INDEX.length]});
+  const name=document.getElementById('ob-m-name').value.trim();
+  const role=document.getElementById('ob-m-role').value;
+  if(!name)return;
+  obMembers.push({name,role,color:OB_COLORS[obMembers.length%OB_COLORS.length]});
   document.getElementById('ob-m-name').value='';
   renderObMembers();
 }
-
-function obRemoveMember(i){
-  obMembers.splice(i,1);
-  renderObMembers();
-}
-
+function obRemoveMember(i){obMembers.splice(i,1);renderObMembers();}
 function renderObMembers(){
-  document.getElementById('ob-members-list').innerHTML = obMembers.map((m,i)=>`
+  document.getElementById('ob-members-list').innerHTML=obMembers.map((m,i)=>`
     <div class="ob-member-card">
-      <div class="ob-member-avatar" style="background:${m.color}22;font-size:20px">${ROLE_EMOJIS[m.role]||'🙂'}</div>
-      <div class="ob-member-info">
-        <div class="ob-member-name">${m.name}</div>
-        <div class="ob-member-sub">${ROLE_LABELS[m.role]||'Otro'}</div>
-      </div>
+      <div class="ob-member-avatar" style="background:${m.color}22">${ROLE_EMOJIS[m.role]||'🙂'}</div>
+      <div class="ob-member-info"><div class="ob-member-name">${m.name}</div><div class="ob-member-sub">${ROLE_LABELS[m.role]||'Otro'}</div></div>
       <button class="ob-member-del" onclick="obRemoveMember(${i})">✕</button>
     </div>`).join('');
 }
 
 function obFinish(){
-  const nombre = document.getElementById('ob-nombre').value.trim() || 'Mamá';
-  const hogar = document.getElementById('ob-hogar').value.trim() || 'El Mando de Casa';
-
-  // Construir miembros: la persona principal + los añadidos
-  const mainMember = {key:'main', name: nombre, role:'main', color:'#7F77DD'};
-  const family = [mainMember, ...obMembers.map((m,i)=>({
-    key:'m'+i, name:m.name, role:m.role, color:m.color
-  }))];
-
+  const nombre=document.getElementById('ob-nombre').value.trim()||'Mamá';
+  const hogar=document.getElementById('ob-hogar').value.trim()||'El Mando de Casa';
+  const family=[{key:'main',name:nombre,role:'main',color:'#7F77DD'},...obMembers.map((m,i)=>({key:'m'+i,name:m.name,role:m.role,color:m.color}))];
   localStorage.setItem('mdc_setup_done','1');
-  localStorage.setItem('mdc_nombre', nombre);
-  localStorage.setItem('mdc_hogar', hogar);
-  localStorage.setItem('mdc_family', JSON.stringify(family));
-
+  localStorage.setItem('mdc_nombre',nombre);
+  localStorage.setItem('mdc_hogar',hogar);
+  localStorage.setItem('mdc_family',JSON.stringify(family));
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('app').style.display='block';
   initApp();
 }
 
 // ═══════════════════════════════════════
-//  APP
+// APP
 // ═══════════════════════════════════════
 const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const MENU_KEYS=['lun','mar','mie','jue','vie','sab','dom'];
 const MENU_LABELS=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const CAT_LABELS={comida:'🛒 Comida',hogar:'🏠 Hogar',ropa:'👕 Ropa',transporte:'🚗 Transporte',ocio:'🎉 Ocio',salud:'💊 Salud',otros:'📦 Otros'};
+const CAT_COLORS={comida:'#1D9E75',hogar:'#7F77DD',ropa:'#D4537E',transporte:'#185FA5',ocio:'#E8A838',salud:'#E07B4F',otros:'#888'};
 const now=new Date();
 
-let family=[];
-let tasks=[];
-let menuData={};
-let compra=[];
-let events=[];
+let family=[], tasks=[], menuData={}, compra=[], events=[], gastos=[], presupuesto=0;
 
 function initApp(){
-  // Cargar familia
-  family = JSON.parse(localStorage.getItem('mdc_family')||'[]');
+  family=JSON.parse(localStorage.getItem('mdc_family')||'[]');
   if(!family.length) family=[{key:'main',name:'Mamá',role:'main',color:'#7F77DD'}];
+  tasks=JSON.parse(localStorage.getItem('mdc_tasks')||'[]');
+  menuData=JSON.parse(localStorage.getItem('mdc_menu')||'null')||{lun:{comida:'',cena:''},mar:{comida:'',cena:''},mie:{comida:'',cena:''},jue:{comida:'',cena:''},vie:{comida:'',cena:''},sab:{comida:'',cena:''},dom:{comida:'',cena:''}};
+  compra=JSON.parse(localStorage.getItem('mdc_compra')||'[]');
+  events=JSON.parse(localStorage.getItem('mdc_events')||'[]');
+  gastos=JSON.parse(localStorage.getItem('mdc_gastos')||'[]');
+  presupuesto=parseFloat(localStorage.getItem('mdc_presupuesto')||'0');
 
-  // Cargar resto
-  tasks = JSON.parse(localStorage.getItem('mdc_tasks')||'[]');
-  menuData = JSON.parse(localStorage.getItem('mdc_menu')||'null')||{lun:{comida:'',cena:''},mar:{comida:'',cena:''},mie:{comida:'',cena:''},jue:{comida:'',cena:''},vie:{comida:'',cena:''},sab:{comida:'',cena:''},dom:{comida:'',cena:''}};
-  compra = JSON.parse(localStorage.getItem('mdc_compra')||'[]');
-  events = JSON.parse(localStorage.getItem('mdc_events')||'[]');
-
-  // Header
-  const hogar = localStorage.getItem('mdc_hogar')||'El Mando de Casa';
-  const nombre = localStorage.getItem('mdc_nombre')||'';
+  const hogar=localStorage.getItem('mdc_hogar')||'El Mando de Casa';
   document.getElementById('app-title').textContent='🏠 '+hogar;
-  document.getElementById('fecha').textContent=`${DAYS[now.getDay()]}, ${now.getDate()} de ${MONTHS[now.getMonth()]} de ${now.getFullYear()}`;
+  document.getElementById('fecha').textContent=DAYS[now.getDay()]+', '+now.getDate()+' de '+MONTHS[now.getMonth()]+' de '+now.getFullYear();
 
-  // Poblar selects con miembros de la familia
   populateSelects();
+  if(presupuesto>0) document.getElementById('presupuesto-input').value=presupuesto;
   renderAll();
+  requestNotifPermission();
 }
 
 function populateSelects(){
-  const opts = family.map(m=>`<option value="${m.key}">${m.name}</option>`).join('');
+  const opts=family.map(m=>`<option value="${m.key}">${m.name}</option>`).join('');
   document.getElementById('new-who').innerHTML=opts;
   document.getElementById('ev-who').innerHTML=`<option value="todos">Toda la familia</option>`+opts;
   document.getElementById('gasto-who').innerHTML=opts;
 }
 
-function memberLabel(key){
-  const m=family.find(f=>f.key===key);
-  return m?m.name:key;
-}
-function memberColor(key){
-  const m=family.find(f=>f.key===key);
-  return m?m.color:'#ccc';
-}
-function memberInitials(key){
-  const m=family.find(f=>f.key===key);
-  if(!m)return '?';
-  return m.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-}
+function memberLabel(key){const m=family.find(f=>f.key===key);return m?m.name:key;}
+function memberColor(key){const m=family.find(f=>f.key===key);return m?m.color:'#ccc';}
+function memberInitials(key){const m=family.find(f=>f.key===key);if(!m)return '?';return m.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 
-function badge(who){
-  const col=memberColor(who);
-  return `<span class="badge" style="background:${col}22;color:${col}">${memberLabel(who)}</span>`;
-}
-function check(id,done){return `<div class="task-check${done?' done':''}" onclick="toggle(${id})">${done?'✓':''}</div>`}
-function taskRow(t){return `<div class="task-row">${check(t.id,t.done)}<span class="task-text${t.done?' done':''}">${t.text}</span>${badge(t.who)}</div>`}
+function badge(who){const col=memberColor(who);return `<span class="badge" style="background:${col}22;color:${col}">${memberLabel(who)}</span>`;}
+function check(id,done){return `<div class="task-check${done?' done':''}" onclick="toggle(${id})">${done?'✓':''}</div>`;}
+function taskRow(t){return `<div class="task-row">${check(t.id,t.done)}<span class="task-text${t.done?' done':''}">${t.text}</span>${badge(t.who)}</div>`;}
+function fmtDate(d){const[y,m,day]=d.split('-');return day+'/'+m+'/'+y;}
 
 function saveTasks(){localStorage.setItem('mdc_tasks',JSON.stringify(tasks));}
 function saveMenu(){localStorage.setItem('mdc_menu',JSON.stringify(menuData));}
 function saveCompra(){localStorage.setItem('mdc_compra',JSON.stringify(compra));}
 function saveEvents(){localStorage.setItem('mdc_events',JSON.stringify(events));}
+function saveGastos(){localStorage.setItem('mdc_gastos',JSON.stringify(gastos));}
 
+// HOY
 function renderHoy(){
-  const todayTasks=tasks.filter(t=>t.today||t.hoy);
-  document.getElementById('hoy-tasks').innerHTML=todayTasks.length
-    ?todayTasks.map(taskRow).join('')
-    :'<div class="empty-msg">Sin tareas para hoy 🎉</div>';
+  const todayTasks=tasks.filter(t=>t.hoy||t.today);
+  document.getElementById('hoy-tasks').innerHTML=todayTasks.length?todayTasks.map(taskRow).join(''):'<div class="empty-msg">Sin tareas para hoy 🎉</div>';
   const dow=now.getDay();
   const menuIdx=dow===0?6:dow-1;
-  const key=MENU_KEYS[menuIdx];
-  const m=menuData[key];
+  const m=menuData[MENU_KEYS[menuIdx]];
   document.getElementById('hoy-comida').textContent=m.comida?'Comida: '+m.comida:'Comida: —';
   document.getElementById('hoy-cena').textContent=m.cena?'Cena: '+m.cena:'Cena: —';
-  const upcoming=events.filter(e=>new Date(e.date+'T00:00:00')>=new Date(now.toDateString())).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+  const upcoming=[...events].filter(e=>new Date(e.date+'T00:00:00')>=new Date(now.toDateString())).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
   document.getElementById('hoy-events').innerHTML=upcoming.length
     ?upcoming.map(e=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div><div class="event-title">${e.title}</div><div class="event-meta">${fmtDate(e.date)}${e.time?' · '+e.time:''}</div></div></div>`).join('')
     :'<div class="empty-msg">Sin eventos próximos</div>';
   updateStats();
 }
-
-function fmtDate(d){const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
 function updateStats(){
   document.getElementById('stat-pend').textContent=tasks.filter(t=>!t.done).length;
   document.getElementById('stat-done').textContent=tasks.filter(t=>t.done).length;
 }
 
+// TAREAS
 function renderTareas(){
   document.getElementById('tasks-hogar').innerHTML=tasks.filter(t=>t.cat==='hogar').map(taskRow).join('')||'<div class="empty-msg">Sin tareas de hogar</div>';
   document.getElementById('tasks-ninos').innerHTML=tasks.filter(t=>t.cat==='familia').map(taskRow).join('')||'<div class="empty-msg">Sin tareas asignadas</div>';
 }
-
 function toggle(id){
   const t=tasks.find(x=>x.id===id);
   if(t){t.done=!t.done;saveTasks();}
   renderAll();
 }
-
 function addTask(){
   const txt=document.getElementById('new-task').value.trim();
   const who=document.getElementById('new-who').value;
   if(!txt)return;
   tasks.push({id:Date.now(),text:txt,who,cat:'hogar',done:false,hoy:true});
   document.getElementById('new-task').value='';
-  saveTasks();renderAll();
-  showToast('Tarea añadida ✅');
+  saveTasks();renderAll();showToast('Tarea añadida ✅');
 }
 
+// MENÚ
 function renderMenu(){
   const dow=now.getDay();
   const todayIdx=dow===0?6:dow-1;
   document.getElementById('menu-list').innerHTML=MENU_KEYS.map((key,i)=>{
     const m=menuData[key];
-    const isToday=i===todayIdx;
-    return `<div class="day-row${isToday?' today':''}">
+    return `<div class="day-row${i===todayIdx?' today':''}">
       <div class="day-label">${MENU_LABELS[i]}</div>
       <div style="flex:1;display:flex;flex-direction:column;gap:2px">
         <div style="display:flex;align-items:center;gap:4px">
@@ -627,18 +508,16 @@ function renderMenu(){
     </div>`;
   }).join('');
   document.getElementById('compra-list').innerHTML=compra.length
-    ?compra.map((c,i)=>`<div class="compra-item">${c}<button onclick="removeCompra(${i})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button></div>`).join('')
-    :'<div class="empty-msg">Lista vacía — añade productos arriba</div>';
+    ?compra.map((c,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ec;font-size:13px;color:#555">${c}<button onclick="removeCompra(${i})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button></div>`).join('')
+    :'<div class="empty-msg">Lista vacía</div>';
 }
-
 function startEdit(key,field){
-  const el=document.getElementById(`meal-${field}-${key}`);
+  const el=document.getElementById('meal-'+field+'-'+key);
   const cur=menuData[key][field]||'';
   el.outerHTML=`<input class="meal-input" id="meal-${field}-${key}" type="text" value="${cur}" placeholder="${field==='comida'?'Comida...':'Cena...'}" onblur="saveEdit('${key}','${field}',this.value)" onkeydown="if(event.key==='Enter')this.blur()">`;
-  document.getElementById(`meal-${field}-${key}`).focus();
+  document.getElementById('meal-'+field+'-'+key).focus();
 }
 function saveEdit(key,field,val){menuData[key][field]=val.trim();saveMenu();renderMenu();renderHoy();}
-
 function addCompra(){
   const v=document.getElementById('new-compra').value.trim();
   if(!v)return;
@@ -647,6 +526,7 @@ function addCompra(){
 }
 function removeCompra(i){compra.splice(i,1);saveCompra();renderMenu();}
 
+// FAMILIA
 function renderFamilia(){
   document.getElementById('family-list').innerHTML=family.map(m=>{
     const tot=tasks.filter(t=>t.who===m.key).length;
@@ -668,6 +548,7 @@ function renderFamilia(){
     :'<div class="empty-msg">Sin eventos — añade el primero</div>';
 }
 
+// EVENTOS
 let selectedColor='#7F77DD';
 function openModal(){
   document.getElementById('ev-title').value='';
@@ -697,6 +578,88 @@ function saveEvent(){
 }
 function deleteEvent(i){events.splice(i,1);saveEvents();renderAll();showToast('Evento eliminado');}
 
+// GASTOS
+function savePresupuesto(){
+  const v=parseFloat(document.getElementById('presupuesto-input').value);
+  if(!v||v<=0){showToast('Pon un presupuesto válido ⚠️');return;}
+  presupuesto=v;
+  localStorage.setItem('mdc_presupuesto',v);
+  renderGastos();showToast('Presupuesto guardado ✅');
+}
+function addGasto(){
+  const desc=document.getElementById('gasto-desc').value.trim();
+  const importe=parseFloat(document.getElementById('gasto-importe').value);
+  const cat=document.getElementById('gasto-cat').value;
+  const who=document.getElementById('gasto-who').value;
+  if(!desc||!importe||importe<=0){showToast('Rellena todos los campos ⚠️');return;}
+  const d=new Date();
+  const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  gastos.push({id:Date.now(),desc,importe,cat,who,date:dateStr});
+  document.getElementById('gasto-desc').value='';
+  document.getElementById('gasto-importe').value='';
+  saveGastos();renderGastos();showToast('Gasto añadido 💰');
+}
+function deleteGasto(id){
+  gastos=gastos.filter(g=>g.id!==id);
+  saveGastos();renderGastos();showToast('Gasto eliminado');
+}
+function renderGastos(){
+  const mes=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const mg=gastos.filter(g=>g.date.startsWith(mes));
+  const total=mg.reduce((s,g)=>s+g.importe,0);
+  document.getElementById('gasto-total').textContent=total.toFixed(2)+'€';
+  const restEl=document.getElementById('gasto-restante');
+  if(presupuesto>0){
+    const rest=presupuesto-total;
+    restEl.textContent=(rest>=0?rest.toFixed(2):'-'+Math.abs(rest).toFixed(2))+'€';
+    restEl.style.color=rest>=0?'#1D9E75':'#e74c3c';
+    const pct=Math.min(100,Math.round(total/presupuesto*100));
+    const bar=document.getElementById('presupuesto-bar');
+    bar.style.width=pct+'%';
+    bar.style.background=pct>=100?'#e74c3c':pct>=80?'#E8A838':'#1D9E75';
+    document.getElementById('presupuesto-msg').textContent=pct+'% del presupuesto usado'+(pct>=100?' ⚠️ ¡Te has pasado!':'');
+  } else {
+    restEl.textContent='—€';
+    document.getElementById('presupuesto-msg').textContent='Fija un presupuesto mensual arriba';
+  }
+  const cats={};
+  mg.forEach(g=>{cats[g.cat]=(cats[g.cat]||0)+g.importe;});
+  document.getElementById('gastos-cats').innerHTML=Object.keys(cats).length
+    ?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f0ec">
+        <span style="font-size:13px;flex:1">${CAT_LABELS[cat]||cat}</span>
+        <span style="font-size:13px;font-weight:600;color:${CAT_COLORS[cat]||'#888'}">${amt.toFixed(2)}€</span>
+      </div>`).join('')
+    :'<div class="empty-msg">Sin gastos este mes</div>';
+  document.getElementById('gastos-list').innerHTML=mg.length
+    ?[...mg].reverse().map(g=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec">
+        <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[g.cat]||'#888'};flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-size:14px;color:#1a1a1a">${g.desc}</div>
+          <div style="font-size:11px;color:#aaa">${CAT_LABELS[g.cat]||g.cat} · ${memberLabel(g.who)} · ${fmtDate(g.date)}</div>
+        </div>
+        <span style="font-size:14px;font-weight:600">${g.importe.toFixed(2)}€</span>
+        <button onclick="deleteGasto(${g.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
+      </div>`).join('')
+    :'<div class="empty-msg">Sin gastos registrados</div>';
+}
+
+// NOTIFICACIONES
+async function requestNotifPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default') await Notification.requestPermission();
+  scheduleNotifications();
+}
+function scheduleNotifications(){
+  if(Notification.permission!=='granted')return;
+  if(!('serviceWorker' in navigator))return;
+  navigator.serviceWorker.ready.then(reg=>{
+    if(reg.active) reg.active.postMessage({type:'SCHEDULE_NOTIFICATIONS',events:events});
+  });
+}
+
+// UTILS
 function showTab(name){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
@@ -708,126 +671,14 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-// --- GASTOS ---
-const CAT_LABELS={comida:'🛒 Comida',hogar:'🏠 Hogar',ropa:'👕 Ropa',transporte:'🚗 Transporte',ocio:'🎉 Ocio',salud:'💊 Salud',otros:'📦 Otros'};
-const CAT_COLORS={comida:'#1D9E75',hogar:'#7F77DD',ropa:'#D4537E',transporte:'#185FA5',ocio:'#E8A838',salud:'#E07B4F',otros:'#888'};
-
-let gastos=JSON.parse(localStorage.getItem('mdc_gastos')||'[]');
-let presupuesto=parseFloat(localStorage.getItem('mdc_presupuesto')||'0');
-
-function saveGastos(){localStorage.setItem('mdc_gastos',JSON.stringify(gastos));}
-function savePresupuesto(){
-  const v=parseFloat(document.getElementById('presupuesto-input').value);
-  if(!v||v<=0){showToast('Pon un presupuesto válido ⚠️');return;}
-  presupuesto=v;
-  localStorage.setItem('mdc_presupuesto',v);
-  renderGastos();
-  showToast('Presupuesto guardado ✅');
-}
-
-function addGasto(){
-  const desc=document.getElementById('gasto-desc').value.trim();
-  const importe=parseFloat(document.getElementById('gasto-importe').value);
-  const cat=document.getElementById('gasto-cat').value;
-  const who=document.getElementById('gasto-who').value;
-  if(!desc||!importe||importe<=0){showToast('Rellena todos los campos ⚠️');return;}
-  const now2=new Date();
-  gastos.push({id:Date.now(),desc,importe,cat,who,date:`${now2.getFullYear()}-${String(now2.getMonth()+1).padStart(2,'0')}-${String(now2.getDate()).padStart(2,'0')}`});
-  document.getElementById('gasto-desc').value='';
-  document.getElementById('gasto-importe').value='';
-  saveGastos();renderGastos();
-  showToast('Gasto añadido 💰');
-}
-
-function deleteGasto(id){
-  gastos=gastos.filter(g=>g.id!==id);
-  saveGastos();renderGastos();
-  showToast('Gasto eliminado');
-}
-
-function renderGastos(){
-  // Solo gastos del mes actual
-  const mes=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const mesGastos=gastos.filter(g=>g.date.startsWith(mes));
-  const total=mesGastos.reduce((s,g)=>s+g.importe,0);
-
-  // Stats
-  document.getElementById('gasto-total').textContent=total.toFixed(2)+'€';
-  const restante=presupuesto-total;
-  const restEl=document.getElementById('gasto-restante');
-  restEl.textContent=(presupuesto>0?(restante>=0?restante.toFixed(2):'-'+Math.abs(restante).toFixed(2)):'—')+'€';
-  restEl.style.color=restante>=0?'#1D9E75':'#e74c3c';
-
-  // Presupuesto
-  if(presupuesto>0){
-    document.getElementById('presupuesto-input').value=presupuesto;
-    const pct=Math.min(100,Math.round(total/presupuesto*100));
-    const bar=document.getElementById('presupuesto-bar');
-    bar.style.width=pct+'%';
-    bar.style.background=pct>=100?'#e74c3c':pct>=80?'#E8A838':'#1D9E75';
-    document.getElementById('presupuesto-msg').textContent=pct+'% del presupuesto usado'+(pct>=100?' — ⚠️ Te has pasado!':'');
-  }
-
-  // Por categoría
-  const cats={};
-  mesGastos.forEach(g=>{cats[g.cat]=(cats[g.cat]||0)+g.importe;});
-  document.getElementById('gastos-cats').innerHTML=Object.keys(cats).length
-    ?Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
-      <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f0ec">
-        <span style="font-size:13px;flex:1;color:#1a1a1a">${CAT_LABELS[cat]||cat}</span>
-        <span style="font-size:13px;font-weight:600;color:${CAT_COLORS[cat]||'#888'}">${amt.toFixed(2)}€</span>
-      </div>`).join('')
-    :'<div class="empty-msg">Sin gastos este mes</div>';
-
-  // Lista
-  document.getElementById('gastos-list').innerHTML=mesGastos.length
-    ?[...mesGastos].reverse().map(g=>`
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec">
-        <div style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[g.cat]||'#888'};flex-shrink:0"></div>
-        <div style="flex:1">
-          <div style="font-size:14px;color:#1a1a1a">${g.desc}</div>
-          <div style="font-size:11px;color:#aaa">${CAT_LABELS[g.cat]||g.cat} · ${memberLabel(g.who)} · ${fmtDate(g.date)}</div>
-        </div>
-        <span style="font-size:14px;font-weight:600;color:#1a1a1a">${g.importe.toFixed(2)}€</span>
-        <button onclick="deleteGasto(${g.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
-      </div>`).join('')
-    :'<div class="empty-msg">Sin gastos registrados</div>';
-}
-
 function renderAll(){renderHoy();renderTareas();renderMenu();renderFamilia();renderGastos();}
 
-// Permitir Enter en onboarding
 document.getElementById('ob-nombre').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
 document.getElementById('ob-m-name').addEventListener('keydown',e=>{if(e.key==='Enter')obAddMember();});
 
-// ═══════════════════════════════════════
-//  NOTIFICACIONES
-// ═══════════════════════════════════════
-async function requestNotifPermission(){
-  if(!('Notification' in window)) return;
-  if(Notification.permission === 'default'){
-    await Notification.requestPermission();
-  }
-  scheduleNotifications();
-}
-
-function scheduleNotifications(){
-  if(Notification.permission !== 'granted') return;
-  if(!('serviceWorker' in navigator)) return;
-  navigator.serviceWorker.ready.then(reg => {
-    reg.active.postMessage({
-      type: 'SCHEDULE_NOTIFICATIONS',
-      events: events
-    });
-  });
-}
-
-// Arrancar
 obInit();
 
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
