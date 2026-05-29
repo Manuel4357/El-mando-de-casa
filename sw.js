@@ -24,7 +24,7 @@ self.addEventListener('fetch', e => {
 // Notificaciones programadas
 self.addEventListener('message', e => {
   if(e.data && e.data.type === 'SCHEDULE_NOTIFICATIONS'){
-    scheduleAll(e.data.events);
+    scheduleAll(e.data.events, e.data.cumples||[]);
   }
 });
 
