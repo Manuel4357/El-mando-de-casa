@@ -150,6 +150,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="ob-add-row">
         <input id="ob-m-name" type="text" placeholder="Nombre...">
         <select id="ob-m-role">
+          <option value="mama">Mamá</option>
           <option value="papa">Papá</option>
           <option value="hijo">Hijo/a</option>
           <option value="abuelo">Abuelo/a</option>
@@ -171,7 +172,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="ob-footer">
     <div class="ob-dots" id="ob-dots"></div>
     <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Continuar →</button>
-    <button class="ob-skip" id="ob-skip-btn" onclick="obSkip()">Saltar introducción</button>
+
   </div>
 </div>
 
@@ -211,12 +212,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div id="tareas" class="section">
     <div class="card"><div class="card-title">🏠 Hogar</div><div id="tasks-hogar"></div></div>
     <div class="card"><div class="card-title">👦 Familia</div><div id="tasks-ninos"></div></div>
+    <!-- RECURRENTES -->
+    <div class="card">
+      <div class="card-title">🔄 Diarias
+        <button onclick="resetRecurring('daily')" style="margin-left:auto;font-size:11px;padding:3px 8px;border-radius:8px;border:1px solid #e0e0e0;background:#f9f9f7;color:#666;cursor:pointer">Resetear</button>
+      </div>
+      <div id="tasks-daily"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔄 Semanales
+        <button onclick="resetRecurring('weekly')" style="margin-left:auto;font-size:11px;padding:3px 8px;border-radius:8px;border:1px solid #e0e0e0;background:#f9f9f7;color:#666;cursor:pointer">Resetear</button>
+      </div>
+      <div id="tasks-weekly"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔄 Mensuales
+        <button onclick="resetRecurring('monthly')" style="margin-left:auto;font-size:11px;padding:3px 8px;border-radius:8px;border:1px solid #e0e0e0;background:#f9f9f7;color:#666;cursor:pointer">Resetear</button>
+      </div>
+      <div id="tasks-monthly"></div>
+    </div>
     <div class="card" style="border:1.5px dashed #e0e0e0;box-shadow:none;background:#fafaf8">
       <div class="card-title">➕ Nueva tarea</div>
-      <div class="add-row">
-        <input id="new-task" type="text" placeholder="Ej: Tender la ropa...">
-        <select id="new-who"></select>
-        <button onclick="addTask()">+</button>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+        <input id="new-task" type="text" placeholder="Ej: Tender la ropa..." class="gasto-form-input" style="margin-bottom:0">
+        <div style="display:flex;gap:8px">
+          <select id="new-who" class="gasto-form-input" style="flex:1;margin-bottom:0"></select>
+          <select id="new-freq" class="gasto-form-input" style="flex:1;margin-bottom:0">
+            <option value="none">Sin repetir</option>
+            <option value="daily">📅 Diaria</option>
+            <option value="weekly">📆 Semanal</option>
+            <option value="monthly">🗓️ Mensual</option>
+          </select>
+        </div>
+        <button onclick="addTask()" class="btn-full btn-purple" style="margin-top:0">+ Añadir tarea</button>
       </div>
     </div>
   </div>
@@ -244,6 +272,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="card-title">📅 Eventos</div>
       <div id="events-list"></div>
       <button class="btn-full btn-purple" style="margin-top:12px" onclick="openModal()">+ Añadir evento</button>
+    </div>
+    <div class="card">
+      <div class="card-title">🎂 Cumpleaños</div>
+      <div id="cumples-list"></div>
+      <button class="btn-full btn-purple" style="margin-top:12px" onclick="openCumpleModal()">+ Añadir cumpleaños</button>
     </div>
   </div>
 
@@ -290,6 +323,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 </div>
 
+<!-- MODAL CUMPLEAÑOS -->
+<div class="modal-bg" id="cumple-modal-bg" onclick="closeCumpleModalBg(event)">
+  <div class="modal">
+    <h3>🎂 Nuevo cumpleaños</h3>
+    <label>Nombre</label><input id="cumple-nombre" type="text" placeholder="Ej: Abuela Carmen">
+    <label>Fecha de nacimiento</label><input id="cumple-fecha" type="date">
+    <label>Relación</label>
+    <select id="cumple-rel">
+      <option value="familia">👨‍👩‍👦 Familia</option>
+      <option value="amigo">👫 Amigo/a</option>
+      <option value="trabajo">💼 Trabajo</option>
+      <option value="otro">🙂 Otro</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeCumpleModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveCumple()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- MODAL EVENTO -->
@@ -322,8 +375,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 const TOTAL_SLIDES=8;
 let obCurrent=0;
 let obMembers=[];
-const ROLE_EMOJIS={papa:'👨',hijo:'👦',abuelo:'👴',otro:'🙂'};
-const ROLE_LABELS={papa:'Papá',hijo:'Hijo/a',abuelo:'Abuelo/a',otro:'Otro'};
+const ROLE_EMOJIS={mama:'👩',papa:'👨',hijo:'👦',abuelo:'👴',otro:'🙂'};
+const ROLE_LABELS={main:'Principal',mama:'Mamá',papa:'Papá',hijo:'Hijo/a',abuelo:'Abuelo/a',otro:'Otro'};
 const OB_COLORS=['#7F77DD','#1D9E75','#185FA5','#D4537E','#E8A838','#E07B4F'];
 
 function obInit(){
@@ -402,7 +455,7 @@ const CAT_LABELS={comida:'🛒 Comida',hogar:'🏠 Hogar',ropa:'👕 Ropa',trans
 const CAT_COLORS={comida:'#1D9E75',hogar:'#7F77DD',ropa:'#D4537E',transporte:'#185FA5',ocio:'#E8A838',salud:'#E07B4F',otros:'#888'};
 const now=new Date();
 
-let family=[], tasks=[], menuData={}, compra=[], events=[], gastos=[], presupuesto=0;
+let family=[], tasks=[], menuData={}, compra=[], events=[], gastos=[], presupuesto=0, cumples=[];
 
 function initApp(){
   family=JSON.parse(localStorage.getItem('mdc_family')||'[]');
@@ -413,6 +466,7 @@ function initApp(){
   events=JSON.parse(localStorage.getItem('mdc_events')||'[]');
   gastos=JSON.parse(localStorage.getItem('mdc_gastos')||'[]');
   presupuesto=parseFloat(localStorage.getItem('mdc_presupuesto')||'0');
+  cumples=JSON.parse(localStorage.getItem('mdc_cumples')||'[]');
 
   const hogar=localStorage.getItem('mdc_hogar')||'El Mando de Casa';
   document.getElementById('app-title').textContent='🏠 '+hogar;
@@ -420,6 +474,7 @@ function initApp(){
 
   populateSelects();
   if(presupuesto>0) document.getElementById('presupuesto-input').value=presupuesto;
+  autoResetTasks();
   renderAll();
   requestNotifPermission();
 }
@@ -445,6 +500,7 @@ function saveMenu(){localStorage.setItem('mdc_menu',JSON.stringify(menuData));}
 function saveCompra(){localStorage.setItem('mdc_compra',JSON.stringify(compra));}
 function saveEvents(){localStorage.setItem('mdc_events',JSON.stringify(events));}
 function saveGastos(){localStorage.setItem('mdc_gastos',JSON.stringify(gastos));}
+function saveCumples(){localStorage.setItem('mdc_cumples',JSON.stringify(cumples));}
 
 // HOY
 function renderHoy(){
@@ -468,8 +524,11 @@ function updateStats(){
 
 // TAREAS
 function renderTareas(){
-  document.getElementById('tasks-hogar').innerHTML=tasks.filter(t=>t.cat==='hogar').map(taskRow).join('')||'<div class="empty-msg">Sin tareas de hogar</div>';
-  document.getElementById('tasks-ninos').innerHTML=tasks.filter(t=>t.cat==='familia').map(taskRow).join('')||'<div class="empty-msg">Sin tareas asignadas</div>';
+  document.getElementById('tasks-hogar').innerHTML=tasks.filter(t=>t.cat==='hogar'&&!t.freq).map(taskRow).join('')||'<div class="empty-msg">Sin tareas de hogar</div>';
+  document.getElementById('tasks-ninos').innerHTML=tasks.filter(t=>t.cat==='familia'&&!t.freq).map(taskRow).join('')||'<div class="empty-msg">Sin tareas asignadas</div>';
+  document.getElementById('tasks-daily').innerHTML=tasks.filter(t=>t.freq==='daily').map(taskRow).join('')||'<div class="empty-msg">Sin tareas diarias</div>';
+  document.getElementById('tasks-weekly').innerHTML=tasks.filter(t=>t.freq==='weekly').map(taskRow).join('')||'<div class="empty-msg">Sin tareas semanales</div>';
+  document.getElementById('tasks-monthly').innerHTML=tasks.filter(t=>t.freq==='monthly').map(taskRow).join('')||'<div class="empty-msg">Sin tareas mensuales</div>';
 }
 function toggle(id){
   const t=tasks.find(x=>x.id===id);
@@ -479,10 +538,40 @@ function toggle(id){
 function addTask(){
   const txt=document.getElementById('new-task').value.trim();
   const who=document.getElementById('new-who').value;
+  const freq=document.getElementById('new-freq').value;
   if(!txt)return;
-  tasks.push({id:Date.now(),text:txt,who,cat:'hogar',done:false,hoy:true});
+  const today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  tasks.push({id:Date.now(),text:txt,who,cat:'hogar',done:false,hoy:freq==='none',freq:freq==='none'?null:freq,lastReset:today});
   document.getElementById('new-task').value='';
   saveTasks();renderAll();showToast('Tarea añadida ✅');
+}
+
+function resetRecurring(freq){
+  const today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  tasks.filter(t=>t.freq===freq).forEach(t=>{t.done=false;t.lastReset=today;});
+  saveTasks();renderAll();showToast('Tareas reseteadas 🔄');
+}
+
+function shouldReset(task){
+  if(!task.freq||!task.lastReset)return false;
+  const last=new Date(task.lastReset+'T00:00:00');
+  const hoy=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(task.freq==='daily') return hoy>last;
+  if(task.freq==='weekly'){
+    const diff=(hoy-last)/(1000*60*60*24);
+    return diff>=7;
+  }
+  if(task.freq==='monthly') return hoy.getMonth()!==last.getMonth()||hoy.getFullYear()!==last.getFullYear();
+  return false;
+}
+
+function autoResetTasks(){
+  const today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  let changed=false;
+  tasks.forEach(t=>{
+    if(t.freq&&shouldReset(t)){t.done=false;t.lastReset=today;changed=true;}
+  });
+  if(changed)saveTasks();
 }
 
 // MENÚ
@@ -546,6 +635,7 @@ function renderFamilia(){
   document.getElementById('events-list').innerHTML=sorted.length
     ?sorted.map((e,i)=>`<div class="event-row"><div class="event-dot" style="background:${e.color}"></div><div style="flex:1"><div class="event-title">${e.title}</div><div class="event-meta">${fmtDate(e.date)}${e.time?' · '+e.time:''}</div></div><button class="event-del" onclick="deleteEvent(${i})">✕</button></div>`).join('')
     :'<div class="empty-msg">Sin eventos — añade el primero</div>';
+  renderCumples();
 }
 
 // EVENTOS
@@ -645,6 +735,71 @@ function renderGastos(){
     :'<div class="empty-msg">Sin gastos registrados</div>';
 }
 
+// CUMPLEAÑOS
+const CUMPLE_REL={familia:'👨‍👩‍👦 Familia',amigo:'👫 Amigo/a',trabajo:'💼 Trabajo',otro:'🙂 Otro'};
+
+function openCumpleModal(){
+  document.getElementById('cumple-nombre').value='';
+  document.getElementById('cumple-fecha').value='';
+  document.getElementById('cumple-rel').value='familia';
+  document.getElementById('cumple-modal-bg').classList.add('open');
+}
+function closeCumpleModal(){document.getElementById('cumple-modal-bg').classList.remove('open');}
+function closeCumpleModalBg(e){if(e.target===document.getElementById('cumple-modal-bg'))closeCumpleModal();}
+
+function saveCumple(){
+  const nombre=document.getElementById('cumple-nombre').value.trim();
+  const fecha=document.getElementById('cumple-fecha').value;
+  const rel=document.getElementById('cumple-rel').value;
+  if(!nombre||!fecha){showToast('Pon nombre y fecha ⚠️');return;}
+  cumples.push({id:Date.now(),nombre,fecha,rel});
+  saveCumples();closeCumpleModal();renderFamilia();
+  scheduleNotifications();
+  showToast('Cumpleaños añadido 🎂');
+}
+
+function deleteCumple(id){
+  cumples=cumples.filter(c=>c.id!==id);
+  saveCumples();renderFamilia();showToast('Cumpleaños eliminado');
+}
+
+function diasParaCumple(fecha){
+  const hoy=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const [,m,d]=fecha.split('-');
+  let proxCumple=new Date(now.getFullYear(),parseInt(m)-1,parseInt(d));
+  if(proxCumple<hoy) proxCumple=new Date(now.getFullYear()+1,parseInt(m)-1,parseInt(d));
+  return Math.round((proxCumple-hoy)/(1000*60*60*24));
+}
+
+function edadCumple(fecha){
+  const [y]=fecha.split('-');
+  return now.getFullYear()-parseInt(y);
+}
+
+function renderCumples(){
+  const sorted=[...cumples].sort((a,b)=>diasParaCumple(a.fecha)-diasParaCumple(b.fecha));
+  document.getElementById('cumples-list').innerHTML=sorted.length
+    ?sorted.map(c=>{
+      const dias=diasParaCumple(c.fecha);
+      const edad=edadCumple(c.fecha);
+      const [,m,d]=c.fecha.split('-');
+      let badge='';
+      if(dias===0) badge='<span style="font-size:11px;padding:2px 8px;border-radius:8px;background:#FAEEDA;color:#633806;font-weight:600">¡Hoy! 🎉</span>';
+      else if(dias<=3) badge=`<span style="font-size:11px;padding:2px 8px;border-radius:8px;background:#EEEDFE;color:#3C3489;font-weight:600">En ${dias}d</span>`;
+      else badge=`<span style="font-size:11px;color:#aaa">En ${dias} días</span>`;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0ec">
+        <div style="font-size:22px">🎂</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a">${c.nombre}</div>
+          <div style="font-size:12px;color:#888">${d}/${m} · ${edad} años · ${CUMPLE_REL[c.rel]||c.rel}</div>
+        </div>
+        ${badge}
+        <button onclick="deleteCumple(${c.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px">✕</button>
+      </div>`;
+    }).join('')
+    :'<div class="empty-msg">Sin cumpleaños registrados</div>';
+}
+
 // NOTIFICACIONES
 async function requestNotifPermission(){
   if(!('Notification' in window))return;
@@ -655,7 +810,7 @@ function scheduleNotifications(){
   if(Notification.permission!=='granted')return;
   if(!('serviceWorker' in navigator))return;
   navigator.serviceWorker.ready.then(reg=>{
-    if(reg.active) reg.active.postMessage({type:'SCHEDULE_NOTIFICATIONS',events:events});
+    if(reg.active) reg.active.postMessage({type:'SCHEDULE_NOTIFICATIONS',events,cumples});
   });
 }
 
