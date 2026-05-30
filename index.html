@@ -527,7 +527,12 @@ function memberInitials(key){const m=family.find(f=>f.key===key);if(!m)return '?
 
 function badge(who){const col=memberColor(who);return `<span class="badge" style="background:${col}22;color:${col}">${memberLabel(who)}</span>`;}
 function check(id,done){return `<div class="task-check${done?' done':''}" onclick="toggle(${id})">${done?'✓':''}</div>`;}
-function taskRow(t){return `<div class="task-row">${check(t.id,t.done)}<span class="task-text${t.done?' done':''}">${t.text}</span>${badge(t.who)}</div>`;}
+function taskRow(t){return `<div class="task-row">${check(t.id,t.done)}<span class="task-text${t.done?' done':''}">${t.text}</span>${badge(t.who)}<button onclick="deleteTask(${t.id})" style="border:none;background:transparent;color:#ddd;cursor:pointer;font-size:15px;flex-shrink:0">✕</button></div>`;}
+
+function deleteTask(id){
+  tasks=tasks.filter(t=>t.id!==id);
+  saveTasks();renderAll();showToast('Tarea eliminada');
+}
 function fmtDate(d){const[y,m,day]=d.split('-');return day+'/'+m+'/'+y;}
 
 function saveTasks(){localStorage.setItem('mdc_tasks',JSON.stringify(tasks));}
@@ -727,7 +732,27 @@ function addGasto(){
   gastos.push({id:Date.now(),desc,importe,cat,who,date:dateStr});
   document.getElementById('gasto-desc').value='';
   document.getElementById('gasto-importe').value='';
-  saveGastos();renderGastos();showToast('Gasto añadido 💰');
+  saveGastos();renderGastos();renderHoy();
+
+  // Notificación inmediata si se supera el presupuesto
+  if(presupuesto>0){
+    const mes=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    const total=gastos.filter(g=>g.date.startsWith(mes)).reduce((s,g)=>s+g.importe,0);
+    if(total>presupuesto){
+      showToast('⚠️ ¡Presupuesto superado! '+total.toFixed(2)+'€ / '+presupuesto+'€');
+      if(Notification.permission==='granted'){
+        navigator.serviceWorker.ready.then(reg=>{
+          reg.showNotification('💸 Presupuesto superado',{
+            body:'Llevas '+total.toFixed(2)+'€ de '+presupuesto+'€ este mes',
+            icon:'./icono.png',
+            tag:'presupuesto-superado',
+            vibrate:[300,100,300,100,300]
+          });
+        });
+      }
+    }
+  }
+  showToast('Gasto añadido 💰');
 }
 function deleteGasto(id){
   gastos=gastos.filter(g=>g.id!==id);
@@ -1015,7 +1040,7 @@ function scheduleNotifications(){
   if(Notification.permission!=='granted')return;
   if(!('serviceWorker' in navigator))return;
   navigator.serviceWorker.ready.then(reg=>{
-    if(reg.active) reg.active.postMessage({type:'SCHEDULE_NOTIFICATIONS',events,cumples});
+    if(reg.active) reg.active.postMessage({type:'SCHEDULE_NOTIFICATIONS',events,cumples,meds,presupuesto,gastos});
   });
 }
 
