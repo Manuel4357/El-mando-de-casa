@@ -210,6 +210,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div style="font-size:13px;color:#888;margin-top:4px" id="hoy-cena"></div>
     </div>
     <div class="card"><div class="card-title">📅 Próximos eventos</div><div id="hoy-events"></div></div>
+    <div class="card">
+      <div class="card-title">📊 Resumen del mes</div>
+      <div id="hoy-stats"></div>
+    </div>
   </div>
 
   <!-- TAREAS -->
@@ -540,6 +544,7 @@ function renderHoy(){
   const todayTasks=tasks.filter(t=>t.hoy||t.today);
   document.getElementById('hoy-tasks').innerHTML=todayTasks.length?todayTasks.map(taskRow).join(''):'<div class="empty-msg">Sin tareas para hoy 🎉</div>';
   renderHoyMed();
+  renderHoyStats();
   const dow=now.getDay();
   const menuIdx=dow===0?6:dow-1;
   const m=menuData[MENU_KEYS[menuIdx]];
@@ -861,6 +866,78 @@ function renderHoyMed(){
         </div>
       </div>`).join('')
     :'<div class="empty-msg">Toda la medicación tomada ✅</div>';
+}
+
+function renderHoyStats(){
+  const el=document.getElementById('hoy-stats');
+  if(!el)return;
+
+  // Tareas por miembro
+  const tareasHtml=family.map(m=>{
+    const tot=tasks.filter(t=>t.who===m.key).length;
+    const don=tasks.filter(t=>t.who===m.key&&t.done).length;
+    const pct=tot?Math.round(don/tot*100):0;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+      <span style="font-size:12px;color:#1a1a1a;width:70px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name}</span>
+      <div style="flex:1;height:6px;background:#f0f0ec;border-radius:3px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${m.color};border-radius:3px;transition:width .4s"></div>
+      </div>
+      <span style="font-size:11px;color:#aaa;width:32px;text-align:right">${don}/${tot}</span>
+    </div>`;
+  }).join('');
+
+  // Gastos por categoría (top 3)
+  const mes=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const mg=gastos.filter(g=>g.date.startsWith(mes));
+  const cats={};
+  mg.forEach(g=>{cats[g.cat]=(cats[g.cat]||0)+g.importe;});
+  const total=mg.reduce((s,g)=>s+g.importe,0);
+  const topCats=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const gastosHtml=topCats.length
+    ?topCats.map(([cat,amt])=>{
+      const pct=total?Math.round(amt/total*100):0;
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+        <span style="font-size:12px;width:70px;flex-shrink:0">${CAT_LABELS[cat]||cat}</span>
+        <div style="flex:1;height:6px;background:#f0f0ec;border-radius:3px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${CAT_COLORS[cat]||'#888'};border-radius:3px"></div>
+        </div>
+        <span style="font-size:11px;color:#aaa;width:40px;text-align:right">${amt.toFixed(0)}€</span>
+      </div>`;
+    }).join('')
+    :'<div style="font-size:12px;color:#bbb">Sin gastos este mes</div>';
+
+  // Medicación tomada vs olvidada
+  let tomadas=0, olvidadas=0;
+  meds.forEach(m=>{
+    m.horas.forEach((_,i)=>{
+      if(isTaken(m.id,i)) tomadas++; else olvidadas++;
+    });
+  });
+  const medTotal=tomadas+olvidadas;
+  const medPct=medTotal?Math.round(tomadas/medTotal*100):0;
+  const medHtml=medTotal
+    ?`<div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:#1a1a1a;width:70px;flex-shrink:0">Hoy</span>
+        <div style="flex:1;height:6px;background:#f0f0ec;border-radius:3px;overflow:hidden">
+          <div style="width:${medPct}%;height:100%;background:#1D9E75;border-radius:3px"></div>
+        </div>
+        <span style="font-size:11px;color:#aaa;width:40px;text-align:right">${tomadas}/${medTotal}</span>
+      </div>`
+    :'<div style="font-size:12px;color:#bbb">Sin medicación</div>';
+
+  el.innerHTML=`
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;font-weight:600;color:#bbb;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">✅ Tareas por persona</div>
+      ${tareasHtml||'<div style="font-size:12px;color:#bbb">Sin tareas</div>'}
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;font-weight:600;color:#bbb;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">💰 Gastos este mes</div>
+      ${gastosHtml}
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:600;color:#bbb;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">💊 Medicación tomada</div>
+      ${medHtml}
+    </div>`;
 }
 
 // CUMPLEAÑOS
