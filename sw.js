@@ -1,4 +1,4 @@
-const CACHE = 'mando-casa-v6';
+const CACHE = 'mando-casa-v7';
 const FILES = ['./', './index.html', './manifest.json', './icono.png'];
 
 self.addEventListener('install', e => {
